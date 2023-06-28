@@ -65,9 +65,9 @@ SHLIB_EXT: 'so'
 #if BUILD_OMS == 1
 
 /opt/microsoft/omsconfig/etc/logrotate.conf; Providers/Extras/Scripts/omsconfig_logrotate.conf; 644; root; root
-/opt/microsoft/omsconfig/bin/OMSConsistencyInvoker; omi-1.0.8/output/bin/OMSConsistencyInvoker; 755; ${{RUN_AS_USER}}; root
+/opt/microsoft/omsconfig/bin/OMSConsistencyInvoker; omi-1.7.0/output/bin/OMSConsistencyInvoker; 755; ${{RUN_AS_USER}}; root
 /opt/microsoft/omsconfig/etc/Inventory.mof; LCM/Base_Inventory.mof; 644; ${{RUN_AS_USER}}; root
-/opt/microsoft/omsconfig/lib/libomsconfig.so; omi-1.0.8/output/lib/libomsconfig.so; 755; ${{RUN_AS_USER}}; root
+/opt/microsoft/omsconfig/lib/libomsconfig.so; omi-1.7.0/output/lib/libomsconfig.so; 755; ${{RUN_AS_USER}}; root
 /opt/microsoft/omsconfig/etc/omsconfig.reg; LCM/omsconfig.reg; 755; ${{RUN_AS_USER}}; root
 /opt/microsoft/omsconfig/Scripts/OMSRsyslog.post.sh; intermediate/Scripts/OMSRsyslog.post.sh; 755; root; root
 /opt/microsoft/omsconfig/Scripts/OMSSysklog.post.sh; intermediate/Scripts/OMSSysklog.post.sh; 755; root; root
@@ -106,15 +106,15 @@ SHLIB_EXT: 'so'
 /opt/microsoft/omsconfig/module_packages/nxOMSWLI_1.46.zip; release/nxOMSWLI_1.46.zip; 755; ${{RUN_AS_USER}}; root
 #endif
 
-/opt/dsc/bin/dsc_host; omi-1.0.8/output/bin/dsc_host; 755; ${{RUN_AS_USER}}; root
+/opt/dsc/bin/dsc_host; omi-1.7.0/output/bin/dsc_host; 755; ${{RUN_AS_USER}}; root
 
 #else
 
 /opt/microsoft/${{SHORT_NAME}}/bin/omi_preexec.sh; intermediate/Scripts/omi_preexec.sh; 755; ${{RUN_AS_USER}}; root
 /opt/microsoft/${{SHORT_NAME}}/etc/logrotate.conf; Providers/Extras/Scripts/logrotate.conf; 644; ${{RUN_AS_USER}}; root
 /opt/microsoft/${{SHORT_NAME}}/etc/dsccore.reg; LCM/dsccore.reg; 755; ${{RUN_AS_USER}}; root
-/opt/microsoft/${{SHORT_NAME}}/bin/ConsistencyInvoker; omi-1.0.8/output/bin/ConsistencyInvoker; 755; ${{RUN_AS_USER}}; root
-/opt/microsoft/${{SHORT_NAME}}/lib/libdsccore.so; omi-1.0.8/output/lib/libdsccore.so; 755; ${{RUN_AS_USER}}; root
+/opt/microsoft/${{SHORT_NAME}}/bin/ConsistencyInvoker; omi-1.7.0/output/bin/ConsistencyInvoker; 755; ${{RUN_AS_USER}}; root
+/opt/microsoft/${{SHORT_NAME}}/lib/libdsccore.so; omi-1.7.0/output/lib/libdsccore.so; 755; ${{RUN_AS_USER}}; root
 /opt/microsoft/${{SHORT_NAME}}/module_packages/nx_1.5.zip; release/nx_1.5.zip; 755; ${{RUN_AS_USER}}; root
 
 
@@ -167,9 +167,9 @@ omsagent (>= 1.0.0)
 #else
 
 #if PACKAGE_TYPE == RPM
-omi >= 1.0.8-6
+omi >= 1.7.0-0
 #else
-omi (>= 1.0.8.6)
+omi (>= 1.7.0.0)
 #endif
 
 #endif

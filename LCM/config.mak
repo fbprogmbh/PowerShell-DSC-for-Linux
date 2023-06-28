@@ -1,4 +1,4 @@
-OMI = $(TOP)/../omi-1.0.8
+OMI = $(TOP)/../omi-1.7.0
 OUTPUTDIR = $(OMI)/output
 
 include $(OMI)/config.mak

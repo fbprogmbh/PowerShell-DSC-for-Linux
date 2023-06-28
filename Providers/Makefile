@@ -16,7 +16,7 @@ MKDEP:=-MD
 
 # define some source paths
 TOP?=$(shell cd ..; pwd)
-OMI_PATH?=$(TOP)/omi-1.0.8
+OMI_PATH?=$(TOP)/omi-1.7.0
 PROVIDER_PATH?=$(TOP)/Providers
 
 # define the root output path

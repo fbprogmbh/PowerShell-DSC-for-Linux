@@ -1,4 +1,4 @@
-# omireg /home/johnkord/dev/imp/dsc/omi-1.0.8/output/lib/libomsconfig.so
+# omireg /home/johnkord/dev/imp/dsc/omi-1.7.0/output/lib/libomsconfig.so
 HOSTING=@requestor@
 LIBRARY=omsconfig
 EXTRACLASS=MSFT_Credential

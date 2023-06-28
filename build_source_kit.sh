@@ -36,8 +36,8 @@ fi
 
 echo "Removing unwanted files."
 # Remove omi symlink
-if [ -h ./omi-1.0.8 ]; then
-    rm omi-1.0.8
+if [ -h ./omi-1.7.0 ]; then
+    rm omi-1.7.0
 fi
 
 # Remove unwanted base directories
