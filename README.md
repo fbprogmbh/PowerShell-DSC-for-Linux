@@ -15,7 +15,7 @@ THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 # Getting Started
 ## Latest Release ##
 The latest release packages for PowerShell DSC for Linux can be downloaded here:
-[Releases](https://github.com/Microsoft/PowerShell-DSC-for-Linux/releases)
+[Releases](https://github.com/fpprogmbh/PowerShell-DSC-for-Linux/releases)
 
 ## Current status and roadmap for Linux DSC
 DSC has shifted to a cross-platform implementation that is developed in the
@@ -57,11 +57,11 @@ together on the same machine.
 ## Supported Linux operating systems
 The following Linux operating system versions are supported by DSC for Linux. 
 - CentOS 5, 6, and 7 (x86/x64)
-- Debian GNU/Linux 6, 7 and 8 (x86/x64) 
+- Debian GNU/Linux 6, 7, 8, 9, 10, 11 and 12 (x86/x64) 
 - Oracle Linux 5, 6 and 7 (x86/x64) 
 - Red Hat Enterprise Linux Server 5, 6 and 7 (x86/x64) 
 - SUSE Linux Enterprise Server 10, 11 and 12 (x86/x64) 
-- Ubuntu Server 12.04 LTS, 14.04 LTS, 16.04 LTS (x86/x64) 
+- Ubuntu Server 12.04 LTS, 14.04 LTS, 16.04 LTS, 18.04 LTS, 20.04 LTS, 22.04 LTS (x86/x64) 
 
 ## Requirements
 The following table describes the required package dependencies for DSC for Linux.
@@ -70,8 +70,8 @@ The following table describes the required package dependencies for DSC for Linu
 -----------------------	| -------------------------------------	| -------------------
 `glibc`			| GNU C Library				| 2.4 - 31.30
 `python`		| Python				| 2.4 - 3.4
-`omi`			| Open Management Infrastructure	| 1.0.8-4
-`openssl`		| OpenSSL Libraries			| 0.9.8e or 1.0
+`omi`			| Open Management Infrastructure	| 1.7.0-0
+`openssl`		| OpenSSL Libraries			| 0.9.8e, 1.0, 1.1 or 3.0
 `python-ctypes`		| Python CTypes library			| Must match Python version
 `libcurl`		| cURL http client library		| 7.15.1
 
@@ -83,21 +83,37 @@ OMI and DSC packages are available in RPM and Debian packages, for x86 and x64 a
 **Examples**
 *Red Hat Enterprise Linux, CentOS, or Oracle Linux 7:*
 ```sh
-wget https://github.com/Microsoft/omi/releases/download/v1.1.0-0/omi-1.1.0.ssl_100.x64.rpm
-wget https://github.com/Microsoft/PowerShell-DSC-for-Linux/releases/download/v1.1.1-294/dsc-1.1.1-294.ssl_100.x64.rpm
+wget https://github.com/fbprogmbh/omi/releases/download/v1.7.0-0/omi-1.7.0.ssl_100.x64.rpm
+wget https://github.com/fbprogmbh/PowerShell-DSC-for-Linux/releases/download/v1.2.4-0/dsc-1.2.4-0.ssl_100.x64.rpm
 
-sudo rpm -Uvh omi-1.1.0.ssl_100.x64.rpm dsc-1.1.1-294.ssl_100.x64.rpm
+sudo rpm -Uvh omi-1.7.0.ssl_100.x64.rpm dsc-1.2.4-0.ssl_100.x64.rpm
 ```
 
-*Ubuntu 14.04 LTS, 16.04 LTS, or Debian GNU/Linux 8, x64:*
+*Ubuntu 14.04 LTS, 16.04 LTS or Debian GNU/Linux 8, x64:*
 ```sh
-wget https://github.com/Microsoft/omi/releases/download/v1.1.0-0/omi-1.1.0.ssl_100.x64.deb
-wget https://github.com/Microsoft/PowerShell-DSC-for-Linux/releases/download/v1.1.1-294/dsc-1.1.1-294.ssl_100.x64.deb
+wget https://github.com/fbprogmbh/omi/releases/download/v1.7.0-0/omi-1.7.0.ssl_100.x64.deb
+wget https://github.com/fbprogmbh/PowerShell-DSC-for-Linux/releases/download/v1.2.4-0/dsc-1.2.4-0.ssl_100.x64.deb
 
-sudo dpkg -i omi-1.1.0.ssl_100.x64.deb dsc-1.1.1-294.ssl_100.x64.deb
+sudo dpkg -i omi-1.7.0.ssl_100.x64.deb dsc-1.2.4-0.ssl_100.x64.deb
 ```
 
-**For more information, review the latest [release notes](https://github.com/Microsoft/PowerShell-DSC-for-Linux/releases/tag/v1.1.1-294) and [product documentation](https://msdn.microsoft.com/en-us/powershell/dsc/lnxgettingstarted).**
+*Ubuntu 18.04 LTS, 20.04 LTS or Debian GNU/Linux 11, x64:*
+```sh
+wget https://github.com/fbprogmbh/omi/releases/download/v1.7.0-0/omi-1.7.0.ssl_110.x64.deb
+wget https://github.com/fbprogmbh/PowerShell-DSC-for-Linux/releases/download/v1.2.4-0/dsc-1.2.4-0.ssl_110.x64.deb
+
+sudo dpkg -i omi-1.7.0.ssl_110.x64.deb dsc-1.2.4-0.ssl_110.x64.deb
+```
+
+*Ubuntu 22.04 LTS or Debian GNU/Linux 12, x64:*
+```sh
+wget https://github.com/fbprogmbh/omi/releases/download/v1.7.0-0/omi-1.7.0.ssl_300.ulinux.x64.deb
+wget https://github.com/fbprogmbh/PowerShell-DSC-for-Linux/releases/download/v1.2.4-0/dsc-1.2.4-0.ssl_300.x64.deb
+
+sudo dpkg -i omi-1.7.0.ssl_300.ulinux.x64.deb dsc-1.2.4-0.ssl_300.x64.deb
+```
+
+**For more information, review the latest [release notes](https://github.com/fbprogmbh/PowerShell-DSC-for-Linux/releases/tag/v1.2.4-0) and [product documentation](https://msdn.microsoft.com/en-us/powershell/dsc/lnxgettingstarted).**
 
 ## To author DSC MOF configuration for Linux on a Windows computer:
 
@@ -146,7 +162,7 @@ sudo dpkg -i omi-1.1.0.ssl_100.x64.deb dsc-1.1.1-294.ssl_100.x64.deb
 		* GNU Make
 		* `g++`
 		* Python version 2.5 or later, the package `python-devel`
-	* Open Management Infrastructure (OMI) 1.0.8. http://theopengroup.org/software/omi
+	* Open Management Infrastructure (OMI) 1.7.0. http://theopengroup.org/software/omi
 		* `pam-devel`
 		* `openssl-devel`
 
@@ -155,32 +171,32 @@ sudo dpkg -i omi-1.1.0.ssl_100.x64.deb dsc-1.1.1-294.ssl_100.x64.deb
 
 ----------
 1. Extract PSDSC.tar into a directory that you will build it from.
-2. Download and extract OMI 1.0.8 into a directory named `omi-1.0.8` in a directory parallel to the LCM and Providers directory.  The directory tree should look something like:
+2. Download and extract OMI 1.7.0 into a directory named `omi-1.7.0` in a directory parallel to the LCM and Providers directory.  The directory tree should look something like:
 ```
    ./configure
    ./LCM
    ./license.txt
-   ./omi-1.0.8
-   ./omi-1.0.8/agent
-   ./omi-1.0.8/base
+   ./omi-1.7.0
+   ./omi-1.7.0/agent
+   ./omi-1.7.0/base
    ...
 ```
 3. Building
 	* Configuring OMI and building
     	* Configure OMI with desired options (refer to OMI documentation for this step).
-    		* The default configuration installs to `/opt/omi-1.0.8`
-     		* To use the default configuration, run: `cd omi-1.0.8 && ./configure`
+    		* The default configuration installs to `/opt/omi-1.7.0`
+     		* To use the default configuration, run: `cd omi-1.7.0 && ./configure`
       	* Run: `make`
 	* Installing OMI:
-      *  Run: `cd omi-1.0.8 && sudo ./output/install`
+      *  Run: `cd omi-1.7.0 && sudo ./output/install`
 	* Registering the LCM + nxProviders with OMI:
       *  Run: `sudo make reg`
 
 4. Running OMI
 	* On the Linux system, run `omiserver` with environment variable `OMI_HOME` set to OMI's installed directory
     	* Run as root: `OMI_HOME=<PATH_TO_INSTALLED_OMI_DIR> $OMI_HOME/bin/omiserver`
-      	* The default installation for OMI 1.0.8 is `/opt/omi-1.0.8`.  Thus, for default installations, part 4Ai above becomes:
-            `OMI_HOME=/opt/omi-1.0.8 $OMI_HOME/bin/omiserver`
+      	* The default installation for OMI 1.7.0 is `/opt/omi-1.7.0`.  Thus, for default installations, part 4Ai above becomes:
+            `OMI_HOME=/opt/omi-1.7.0 $OMI_HOME/bin/omiserver`
    	> Note: In order to run following reboots, it is recommended to configure OMI as a System-V, Upstart, or SystemD daemon 
 
 ## Building and using DSC and OMI from source
@@ -189,16 +205,16 @@ DSC and OMI can also be built together entirely from source in a self-contained 
 
 ```sh
 # Clone DSC source
-git clone https://github.com/Microsoft/PowerShell-DSC-for-Linux.git
+git clone https://github.com/fbprogmbh/PowerShell-DSC-for-Linux.git
 cd PowerShell-DSC-for-Linux
 
 # Place the OMI source where DSC expects it
 # Alternatively clone from Git and symlink to omi/Unix
-wget https://collaboration.opengroup.org/omi/documents/33715/omi-1.0.8.tar.gz
-tar xf omi-1.0.8.tar.gz
+wget https://collaboration.opengroup.org/omi/documents/33715/omi-1.7.0.tar.gz
+tar xf omi-1.7.0.tar.gz
 
 # Build OMI in developer mode
-cd omi-1.0.8
+cd omi-1.7.0
 ./configure --dev
 make -j
 cd ..
@@ -209,7 +225,7 @@ make -j
 make reg
 
 # Start the OMI server
-./omi-1.0.8/output/bin/omiserver
+./omi-1.7.0/output/bin/omiserver
 ```
 
 ### Use Azure Automation as a DSC Pull Server
