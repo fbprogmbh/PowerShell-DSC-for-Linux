@@ -325,7 +325,7 @@ configureomi110:
 	(cd omi-1.7.0; ./configure $(DEBUG_FLAGS) --enable-preexec --prefix=/opt/omi --outputdirname=output_openssl_1.1.0 --localstatedir=/var/opt/omi --sysconfdir=/etc/opt/omi/conf --certsdir=/etc/opt/omi/ssl --opensslcflags="$(openssl110_cflags)" --openssllibs="-L$(current_dir)/ext/curl/current_platform/lib $(openssl110_libs)" --openssllibdir="$(openssl110_libdir)")
 
 configureomi300:
-	(cd omi-1.7.0; ./configure $(DEBUG_FLAGS) --enable-preexec --prefix=/opt/omi --outputdirname=output_openssl_3.0.0 --localstatedir=/var/opt/omi --sysconfdir=/etc/opt/omi/conf --certsdir=/etc/opt/omi/ssl --opensslcflags="$(openssl300_cflags)" --openssllibs="-L$(current_dir)/ext/curl/current_platform/lib $(openssl300_libs)" --openssllibdir="$(openssl300_libdir)")
+	(cd omi-1.7.0; ./configure $(DEBUG_FLAGS) --enable-microsoft --outputdirname=output_openssl_3.0.0)
 
 lcm098:
 	$(MAKE) -C LCM
