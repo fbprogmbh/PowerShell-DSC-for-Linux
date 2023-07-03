@@ -13,3 +13,5 @@
 **/.vscode
 /.idea/
 *.pyc
+/ext/curl/current_platform
+/ext/curl/x64/x64
