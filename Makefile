@@ -1,8 +1,8 @@
 SHELL=/bin/bash
 include config.mak
 -include omi-1.7.0/output/config.mak
-UNAME_P := $(shell uname -p)
-ifeq ($(UNAME_P),x86_64)
+UNAME_M := $(shell uname -m)
+ifeq ($(UNAME_M),x86_64)
  PF_ARCH := x64
 else
  PF_ARCH := x86
