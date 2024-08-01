@@ -121,6 +121,16 @@ endif
 	-mkdir -p release; \
 	cp omi-1.7.0/output_openssl_3.0.0/release/*.{rpm,deb} output/release/*.{rpm,deb} release/
 
+ifeq ($(BUILD_OMS),BUILD_OMS)
+dsckit300: nx nxOMSPerfCounter nxOMSSyslog nxOMSKeyMgmt nxOMSPlugin nxOMSCustomLog nxOMSSudoCustomLog nxFileInventory nxOMSGenerateInventoryMof nxOMSAgentNPMConfig nxOMSAutomationWorker nxOMSAuditdPlugin
+else
+dsckit300: nx nxNetworking nxComputerManagement nxMySQL
+endif
+	$(MAKE) -C $(INSTALLBUILDER_DIR) SSL_VERSION=300 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) BUILD_OMS_VAL=$(BUILD_OMS_VAL)
+
+	-mkdir -p release; \
+	cp omi-1.7.0/output_openssl_3.0.0/release/*.{rpm,deb} output/release/*.{rpm,deb} release/
+
 dsc098: lcm098 providers
 	mkdir -p intermediate/Scripts
 	mkdir -p intermediate/Scripts/python3
@@ -335,6 +345,7 @@ configureomi110:
 
 configureomi300:
 	(cd omi-1.7.0; ./configure $(DEBUG_FLAGS) --enable-microsoft --outputdirname=output_openssl_3.0.0)
+
 
 lcm098:
 	$(MAKE) -C LCM

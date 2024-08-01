@@ -151,7 +151,7 @@ if [ -d "/usr/local_ssl_0.9.8" ] || [ -d "/usr/local_ssl_1.0.0" ] || [ -d "/usr/
     fi
     if [ -d "/usr/local_ssl_3.0.0" ]; then
         if [ "`uname -m`" == "x86_64" ]; then
-            openssl300_libdir=/usr/local_ssl_3.0.0/lib
+            openssl300_libdir=/usr/local_ssl_3.0.0/lib64
         fi
         openssl300_cflags=`PKG_CONFIG_PATH=$openssl300_libdir/pkgconfig $pkgconfig --cflags openssl`
         openssl300_libs=`PKG_CONFIG_PATH=$openssl300_libdir/pkgconfig $pkgconfig --libs openssl`
