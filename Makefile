@@ -111,6 +111,16 @@ endif
 	-mkdir -p release; \
 	cp omi-1.7.0/output_openssl_3.0.0/release/*.{rpm,deb} output/release/*.{rpm,deb} release/
 
+ifeq ($(BUILD_OMS),BUILD_OMS)
+dsckit300: nx nxOMSPerfCounter nxOMSSyslog nxOMSKeyMgmt nxOMSPlugin nxOMSCustomLog nxOMSSudoCustomLog nxFileInventory nxOMSGenerateInventoryMof nxOMSAgentNPMConfig nxOMSAutomationWorker nxOMSAuditdPlugin
+else
+dsckit300: nx nxNetworking nxComputerManagement nxMySQL
+endif
+	$(MAKE) -C $(INSTALLBUILDER_DIR) SSL_VERSION=300 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) BUILD_OMS_VAL=$(BUILD_OMS_VAL)
+
+	-mkdir -p release; \
+	cp omi-1.7.0/output_openssl_3.0.0/release/*.{rpm,deb} output/release/*.{rpm,deb} release/
+
 dsc098: lcm098 providers
 	mkdir -p intermediate/Scripts
 	mkdir -p intermediate/Scripts/python3
@@ -285,7 +295,6 @@ dsc300: lcm300 providers
 	  chmod a+x intermediate/Scripts/python3/`basename $$f`; \
 	done
 	if [ -f ../dsc.version ]; then cp -f ../dsc.version build/dsc.version; else cp -f build/Makefile.version build/dsc.version; fi
-
 
 omi098:
 	$(MAKE) configureomi098
@@ -614,7 +623,7 @@ nxOMSGenerateInventoryMof:
 
 nxOMSPlugin:
 	rm -rf output/staging; \
-	VERSION="3.71"; \
+	VERSION="3.74"; \
 	PROVIDERS="nxOMSPlugin"; \
 	STAGINGDIR="output/staging/$@/DSCResources"; \
 	cat Providers/Modules/$@.psd1 | sed "s@<MODULE_VERSION>@$${VERSION}@" > intermediate/Modules/$@.psd1; \
@@ -661,7 +670,7 @@ nxFileInventory:
 
 nxOMSAgentNPMConfig:
 	rm -rf output/staging; \
-	VERSION="4.5"; \
+	VERSION="4.6"; \
 	PROVIDERS="nxOMSAgentNPMConfig"; \
 	STAGINGDIR="output/staging/$@/DSCResources"; \
 	cat Providers/Modules/$@.psd1 | sed "s@<MODULE_VERSION>@$${VERSION}@" > intermediate/Modules/$@.psd1; \

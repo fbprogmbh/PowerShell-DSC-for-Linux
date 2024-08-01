@@ -6,7 +6,7 @@
       impact="Removing support for USB storage devices reduces the local attack surface of the server."
       remediation="Edit or create a file in the `/etc/modprobe.d/` directory ending in .conf and add `install usb-storage /bin/true` then unload the usb-storage module or run '/opt/microsoft/omsagent/plugin/omsremediate -r disable-unnecessary-kernel-mods'"
       ruleId="acffbbca-3e5b-9aa9-65ee-ff7b6116565f">
-     <check distro="*" command="CheckMatchingLinesInDir" regex="^install\s+usb-storage\s+/bin/true" path="/etc/modprobe.d/"/>
+      <check distro="*" command="CheckMatchingLinesInDir" regex="^install\s+usb-storage\s+/bin/true" path="/etc/modprobe.d/"/>
     </audit>
 
     <audit
@@ -182,14 +182,14 @@
     </audit>
 
     <audit
-      description = "/etc/passwd- file permissions should be set to 0600"
+      description = "/etc/passwd- file permissions should be set to 0644"
       msid="12.3"
       cceid="CCE-3932-1"
       severity="Critical"
       impact="An attacker could join security groups if this file is not properly secured"
       remediation="Set the permissions and ownership of /etc/passwd- or run '/opt/microsoft/omsagent/plugin/omsremediate -r set-etc-passwd-perms"
       ruleId="0c67cac0-1e99-8a8f-32e1-841d18b01a9a">
-      <check distro="*" command="CheckFileStatsIfExists" path="/etc/passwd-" owner="root" group="root,shadow" mode="600"/>
+      <check distro="*" command="CheckFileStatsIfExists" path="/etc/passwd-" owner="root" group="root,shadow" mode="644" allow-stricter="true"/>
     </audit>
 
     <audit
@@ -332,7 +332,7 @@
       msid="33"
       impact="Requiring authentication in single user mode prevents an unauthorized user from rebooting the system into single user to gain root privileges without credentials."
       remediation="run the following command to set a password for the root user: `passwd root`"
-		  ruleId="13a48ca1-92bc-63a1-a4de-b984375fa332">
+      ruleId="13a48ca1-92bc-63a1-a4de-b984375fa332">
       <check distro="*" command="CheckNoMatchingLines" path="/etc/shadow" regex="^root:\s*:"/>
     </audit>
 
@@ -349,7 +349,7 @@
     </audit>
 
     <audit
-      description = "Sending ICMP redirects should be disabled for all interfaces. (net.ipv4.conf.default.accept_redirects = 0)"
+      description = "Sending ICMP redirects should be disabled for all interfaces. (net.ipv4.conf.default.accept_redirects = 0) and (net.ipv4.conf.all.accept_redirects = 0)"
       msid="38.4"
       cceid="CCE-4186-3"
       severity="Critical"
@@ -363,7 +363,7 @@
     </audit>
 
     <audit
-      description = "Sending ICMP redirects should be disabled for all interfaces. (net.ipv4.conf.default.secure_redirects = 0)"
+      description = "Sending ICMP redirects should be disabled for all interfaces. (net.ipv4.conf.default.secure_redirects = 0) and (net.ipv4.conf.all.secure_redirects = 0)"
       msid="38.5"
       cceid="CCE-4151-7"
       severity="Critical"
@@ -441,7 +441,7 @@
     </audit>
 
     <audit
-      description = "Logging of martian packets (those with impossible addresses) should be enabled for all interfaces. (net.ipv4.conf.all.log_martians = 1)"
+      description = "Logging of martian packets (those with impossible addresses) should be enabled for all interfaces. (net.ipv4.conf.all.log_martians = 1) and (net.ipv4.conf.default.log_martians = 1)"
       msid="45.1"
       cceid="CCE-4320-8"
       severity="Critical"
@@ -533,7 +533,7 @@
       impact="If the protocol is not required, it is recommended that the drivers not be installed to reduce the potential attack surface."
       remediation="Edit or create a file in the `/etc/modprobe.d/` directory ending in .conf and add `install sctp /bin/true` then unload the sctp module or run '/opt/microsoft/omsagent/plugin/omsremediate -r disable-unnecessary-kernel-mods'"
       ruleId="78228616-15d4-33fe-0357-88e77f228f05">
-     <check distro="*" command="CheckMatchingLinesInDir" regex="^install\s+sctp\s+/bin/true" path="/etc/modprobe.d/"/>
+      <check distro="*" command="CheckMatchingLinesInDir" regex="^install\s+sctp\s+/bin/true" path="/etc/modprobe.d/"/>
     </audit>
 
     <audit
@@ -872,9 +872,9 @@
       impact="An attacker could abuse this to gain information on networked systems, or spoof DNS requests due to flaws in its trust model"
       remediation="For RedHat, CentOS, and Oracle: Add `NOZEROCONF=yes or no` to /etc/sysconfig/network. For all other distros: Remove any 'ipv4ll' entries in the file '/etc/network/interfaces' or run '/opt/microsoft/omsagent/plugin/omsremediate -r disable-zeroconf'"
       ruleId="083550af-f4fe-4e1a-a304-dac894d58908">
-      <check distro="and|!RedHat|!CentOS|!Oracle|!SLES" command="CheckNoMatchingLinesIfExists" regex="ipv4ll" path="/etc/network/interfaces" />
+      <check distro="and|!RedHat|!CentOS|!Oracle|!SLES|!AlmaLinux|!Rocky" command="CheckNoMatchingLinesIfExists" regex="ipv4ll" path="/etc/network/interfaces" />
       <!--Zeroconf not available on SLES-->
-      <check distro="RedHat|CentOS|Oracle" command="CheckMatchingLines" regex="^NOZEROCONF=\w+\s*$" path="/etc/sysconfig/network" />
+      <check distro="RedHat|CentOS|Oracle|AlmaLinux|Rocky" command="CheckMatchingLines" regex="^NOZEROCONF=\w+\s*$" path="/etc/sysconfig/network" />
       <!--Zeroconf status unknown for Mariner -->
     </audit>
 
@@ -887,7 +887,7 @@
       remediation="Install the cron package (apt-get install -y cron) and confirm the file '/etc/init/cron.conf' contains the line 'start on runlevel [2345]'"
       ruleId="80302f61-d760-4165-a92b-a789e579380f">
       <check distro="Ubuntu|Debian|SLES" command="CheckServiceEnabled" service="cron" />
-      <check distro="CentOS|RedHat|Oracle|Mariner" command="CheckServiceEnabled" service="crond" />
+      <check distro="CentOS|RedHat|Oracle|Mariner|AlmaLinux|Rocky" command="CheckServiceEnabled" service="crond" />
     </audit>
 
     <audit
@@ -1066,7 +1066,7 @@
       remediation="Disable the rpcbind service or run '/opt/microsoft/omsagent/plugin/omsremediate -r disable-rpcbind'"
       ruleId="f4a80328-1d67-45ed-b915-274d2e6c699e">
       <check distro="Debian|Ubuntu|Oracle|CentOS&lt;7|RedHat&lt;7|SLES=11" command="CheckServiceDisabled" service="rpcbind" />
-      <check distro="CentOS&gt;=7|RedHat&gt;=7|SLES&gt;11|Mariner" command="CheckServiceDisabled" service="rpcbind.service,rpcbind.socket" />
+      <check distro="CentOS&gt;=7|RedHat&gt;=7|SLES&gt;11|Mariner|AlmaLinux|Rocky" command="CheckServiceDisabled" service="rpcbind.service,rpcbind.socket" />
     </audit>
 
     <audit
@@ -1076,7 +1076,7 @@
       severity="Important"
       impact="An attacker could use nfs to mount shares and execute/copy files."
       remediation="Disable the nfs service or run '/opt/microsoft/omsagent/plugin/omsremediate -r disable-nfs'"
-      ruleId="ee372ff3-9221-498b-b467-7406bf421168"> 
+      ruleId="ee372ff3-9221-498b-b467-7406bf421168">
       <check distro="*" command="CheckServiceDisabled" service="nfs-server" />
     </audit>
 
@@ -1193,8 +1193,8 @@
       remediation="Ensure the 'remember' option is set to at least 5 in either /etc/pam.d/common-password or both /etc/pam.d/password_auth and /etc/pam.d/system_auth  or run '/opt/microsoft/omsagent/plugin/omsremediate -r configure-password-policy-history'"
       ruleId="57bdeae2-863e-14fb-a463-d6ee64816b33">
       <check distro="Ubuntu|Debian" command="CheckMatchingLines" path="/etc/pam.d/common-password" filter="^password\s+required\s+" regex="\s+remember=(:?[5-9]+|[1-9][0-9]+)"/>
-      <check distro="CentOS|RedHat|Oracle" command="CheckMatchingLines" path="/etc/pam.d/password-auth" filter="^password\s+required\s+" regex="\s+remember=(:?[5-9]+|[1-9][0-9]+)"/>
-      <check distro="CentOS|RedHat|Oracle" command="CheckMatchingLines" path="/etc/pam.d/system-auth" filter="^password\s+required\s+" regex="\s+remember=(:?[5-9]+|[1-9][0-9]+)"/>
+      <check distro="CentOS|RedHat|Oracle|AlmaLinux|Rocky" command="CheckMatchingLines" path="/etc/pam.d/password-auth" filter="^password\s+required\s+" regex="\s+remember=(:?[5-9]+|[1-9][0-9]+)"/>
+      <check distro="CentOS|RedHat|Oracle|AlmaLinux|Rocky" command="CheckMatchingLines" path="/etc/pam.d/system-auth" filter="^password\s+required\s+" regex="\s+remember=(:?[5-9]+|[1-9][0-9]+)"/>
       <check distro="Mariner" command="CheckMatchingLines" path="/etc/pam.d/system-password" filter="^password\s+required\s+" regex="\s+remember=(:?[5-9]+|[1-9][0-9]+)"/>
     </audit>
 
@@ -1207,7 +1207,7 @@
 ```
 password sufficient pam_unix.so sha512
 ```"
-	    ruleId="01ec5346-882b-485d-8960-01dedd608792">
+      ruleId="01ec5346-882b-485d-8960-01dedd608792">
       <check distro="*" command="CheckMatchingLinesInFiles" regex="sha512" filter="^password\s.*\s*pam_unix.so\s+\S+" path="/etc/pam.d/common-password|/etc/pam.d/system-auth|/etc/pam.d/system-password" />
       <check distro="*" command="CheckMatchingLines" regex="^ENCRYPT_METHOD\s+SHA512" path="/etc/login.defs" />
     </audit>
@@ -1236,7 +1236,7 @@ Modify user parameters for all users with a password set to match:
 ```
 # chage --inactive 30 
 ```"
-	    ruleId="91fbaeac-f5d0-4ac9-aa1b-52215aef1ed8">
+      ruleId="91fbaeac-f5d0-4ac9-aa1b-52215aef1ed8">
       <check distro="*" command="CheckShadowDate" key="2" expect="before" value="now" path="/etc/shadow" />
     </audit>
 
@@ -1271,17 +1271,6 @@ Modify user parameters for all users with a password set to match:
       remediation="Remove any users other than `root` with UID `0` or assign them a new UID if appropriate."
       ruleId="b5845ff3-42f4-4112-b2a2-5b827232a053">
       <check distro="*" command="CheckRootUID" path="/etc/passwd"/>
-    </audit>
-
-    <audit
-      description="Remove unnecessary packages"
-      msid="158"
-      cceid="CCE-XXXXX-6"
-      severity="Informational"
-      impact=""
-      remediation="Run '/opt/microsoft/omsagent/plugin/omsremediate -r remove-landscape-common"
-      ruleId="29a14c8c-c7fe-4168-accf-ec224141ba65">
-      <check distro="Ubuntu" command="CheckPackageNotInstalled" packagename="landscape-common" />
     </audit>
 
     <audit
@@ -1369,12 +1358,12 @@ zypper remove rsh
       impact="SMB v1 has well-known, serious vulnerabilities and does not encrypt data in transit. If it must be used for business reasons, it is strongly recommended that additional steps be taken to mitigate the risks inherent to this protocol."
       remediation="If Samba is not running, remove package, otherwise there should be a line in the [global] section of /etc/samba/smb.conf: min protocol = SMB2 or run '/opt/microsoft/omsagent/plugin/omsremediate -r set-smb-min-version"
       ruleId="7624efb0-3026-4c72-8920-48d5be78a50e">
-      <check 
-        distro="*" 
-        command="CheckMatchingLinesSection" 
-        regex="\s*min protocol\s+=\s+SMB2" 
-        expect="^\s*\[global\]" 
-        path="/etc/samba/smb.conf" 
+      <check
+        distro="*"
+        command="CheckMatchingLinesSection"
+        regex="\s*min protocol\s+=\s+SMB2"
+        expect="^\s*\[global\]"
+        path="/etc/samba/smb.conf"
         key="^\s*\[.+\]">
         <dependency type="ServiceStatus">samba|running</dependency>
       </check>
@@ -1451,7 +1440,7 @@ sed -i 's/^\(UMASK\s\+\)[0-9]\{3\}/\1077/g' /etc/login.defs
     </remediation>
 
     <remediation id="disable-zeroconf" msids="89" description="Disable Zeroconf networking">
-      <action distro="Centos|RedHat|Oracle" action="ActionEditConfig" name="NOZEROCONF" value="yes" value-regex="/w" sep="=" path="/etc/sysconfig/network"/>
+      <action distro="Centos|RedHat|Oracle|AlmaLinux|Rocky" action="ActionEditConfig" name="NOZEROCONF" value="yes" value-regex="/w" sep="=" path="/etc/sysconfig/network"/>
     </remediation>
 
 
@@ -1596,7 +1585,7 @@ sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=1
     </remediation>
 
     <remediation id="configure-syslog-file-create-mode" msids="63" description="Configure rsyslog $FileCreateMode">
-      <action distro="CentOS|RedHat|Oracle" action="ActionScript">
+      <action distro="CentOS|RedHat|Oracle|AlmaLinux|Rocky" action="ActionScript">
         <script>
         <![CDATA[
 if [ -z "$(egrep '^\s*$FileCreateMode' /etc/rsyslog.conf 2>&1)" ]; then
@@ -1624,7 +1613,7 @@ fi
 
     <remediation id="set-etc-passwd-perms" msids="12.1,12.3" description="Set permissions on /etc/passwd">
       <action distro="*" action="ActionSetPerms" path="/etc/passwd" name="root:root" value="0644"/>
-      <action distro="*" action="ActionSetPerms" path="/etc/passwd-" name="root:root" value="0600"/>
+      <action distro="*" action="ActionSetPerms" path="/etc/passwd-" name="root:root" value="0644"/>
     </remediation>
 
     <remediation id="set-etc-group-perms" msids="12.2,12.4" description="Set permissions on /etc/group">
@@ -1641,7 +1630,11 @@ fi
         <script>
         <![CDATA[
 # (Audit 93-97, 100-103) Fix Permissions on cron files/folders
-chmod 700 /etc/cron.*
+chmod 700 /etc/cron.d
+chmod 700 /etc/cron.daily
+chmod 700 /etc/cron.hourly
+chmod 700 /etc/cron.monthly
+chmod 700 /etc/cron.weekly
         ]]>
         </script>
       </action>
@@ -1670,7 +1663,7 @@ chmod 700 /etc/cron.*
     <remediation id="disable-rpcbind" msids="129.1" description="Disable rpcbind service">
       <action distro="SLES=11" action="ActionDisableService" service="nfs"/>
       <action distro="*" action="ActionDisableService" service="rpcbind"/>
-      <action distro="CentOS>=7|RedHat>=7|SLES>11" action="ActionDisableService" service="rpcbind.socket"/>
+      <action distro="CentOS>=7|RedHat>=7|SLES>11|AlmaLinux|Rocky" action="ActionDisableService" service="rpcbind.socket"/>
     </remediation>
 
     <remediation id="disable-nfs" msids="129.2" description="Disable NFS service">
