@@ -11,11 +11,11 @@ with warnings.catch_warnings():
 from os.path              import dirname, isfile, join, realpath
 from fcntl                import flock, LOCK_EX, LOCK_UN, LOCK_NB
 from OmsConfigHostHelpers import write_omsconfig_host_telemetry, write_omsconfig_host_switch_event, write_omsconfig_host_log, stop_old_host_instances
+from time                 import sleep
 import subprocess
 import codecs 
 import pprint
 import tempfile
-import os
 
 pathToCurrentScript = realpath(__file__)
 pathToCommonScriptsFolder = dirname(pathToCurrentScript)
@@ -183,25 +183,22 @@ def main(argv):
     output_line = " ".join(host_parameters)
 
     omicli_path = join(helperlib.CONFIG_BINDIR, 'omiclifile')
-
     parameters = []
     parameters.append(omicli_path)
+    parameters.append("/tmp/args")
 
-    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as file:
-        parameters.append(file.name)
+
+    with open("/tmp/args", "w") as file:
         file.write(output_line)
 
     p = subprocess.Popen(parameters, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
-
-    os.remove(file.name)
 
     stdout = stdout.decode() if isinstance(stdout, bytes) else stdout
     stderr = stderr.decode() if isinstance(stderr, bytes) else stderr
     print(stdout)   
     print(stderr)
 
-    
 LG().Log("DEBUG", "Starting Main method for " + argv[0] + " runing with python " + str(sys.version_info))
 main(argv[1:])
 LG().Log("DEBUG", "End of Main method for " +  argv[0] + " runing with python " + str(sys.version_info))
