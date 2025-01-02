@@ -78,7 +78,7 @@ def Get_Marshall(GetScript, SetScript, TestScript, User, Group):
 
     retval = 0
     (retval, GetScript, SetScript, TestScript, User, Group,
-     Result) = Get(GetScript, SetScript, TestScript, User, Group)
+            Result) = Get(GetScript, SetScript, TestScript, User, Group)
 
     GetScript = protocol.MI_String(GetScript)
     SetScript = protocol.MI_String(SetScript)
@@ -145,9 +145,9 @@ def WriteFile(path, contents):
     with opened_w_error(path, 'w') as (f, error):
         if error:
             Print("Exception opening file " + path + " Error Code: " + str(error.errno)
-                  + " Error: " + error.message + error.strerror, file=sys.stderr)
+                    + " Error: " + error.message + error.strerror, file=sys.stderr)
             LG().Log('ERROR', "Exception opening file " + path + " Error Code: " +
-                     str(error.errno) + " Error: " + error.message + error.strerror)
+                    str(error.errno) + " Error: " + error.message + error.strerror)
             return -1
         else:
             f.write(contents.replace("\r", ""))
@@ -225,16 +225,20 @@ def Set(GetScript, SetScript, TestScript, User, Group):
     os.chown(path, uid, gid)
 
     proc = subprocess.Popen(command, stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE, preexec_fn=PreExec(uid, gid, User))
+            stderr=subprocess.PIPE, preexec_fn=PreExec(uid, gid, User))
     exit_code = proc.wait()
-    Print("stdout: " + proc.stdout.read().decode('utf8', 'replace'))
-    LG().Log('INFO', "stdout: " +
-             proc.stdout.read().decode('utf8', 'replace'))
-    Print("stderr: " + proc.stderr.read().decode('utf8', 'replace'))
-    LG().Log('INFO', "stderr: " +
-             proc.stderr.read().decode('utf8', 'replace'))
 
-    os.remove(path)
+    stdoutread=proc.stdout.read().decode('utf8', 'replace')
+    stderrread=proc.stderr.read().decode('utf8', 'replace')
+
+    Print("stdout: " + stdoutread)
+    LG().Log('INFO', "stdout: " + stdoutread)
+    Print("stderr: " + stderrread)
+    LG().Log('INFO', "stderr: " + stderrread)
+
+    if exit_code != 0:
+         LG().Log('ERROR', "############# ERROR in test-script:\n" + TestScript)
+
     return [exit_code]
 
 
@@ -265,14 +269,20 @@ def Test(GetScript, SetScript, TestScript, User, Group):
     os.chown(path, uid, gid)
 
     proc = subprocess.Popen(command, stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE, preexec_fn=PreExec(uid, gid, User))
+            stderr=subprocess.PIPE, preexec_fn=PreExec(uid, gid, User))
     exit_code = proc.wait()
-    Print("stdout: " + proc.stdout.read().decode('utf8', 'replace'))
-    LG().Log('INFO', "stdout: " +
-             proc.stdout.read().decode('utf8', 'replace'))
-    Print("stderr: " + proc.stderr.read().decode('utf8', 'replace'))
-    LG().Log('INFO', "stderr: " +
-             proc.stderr.read().decode('utf8', 'replace'))
+
+    stdoutread=proc.stdout.read().decode('utf8', 'replace')
+    stderrread=proc.stderr.read().decode('utf8', 'replace')
+
+    Print("stdout: " + stdoutread)
+    LG().Log('INFO', "stdout: " + stdoutread)
+    Print("stderr: " + stderrread)
+    LG().Log('INFO', "stderr: " + stderrread)
+
+
+    if exit_code != 0:
+         LG().Log('ERROR', "############# ERROR in test-script:\n" + TestScript)
 
     os.remove(path)
     return [exit_code]
@@ -306,17 +316,22 @@ def Get(GetScript, SetScript, TestScript, User, Group):
     os.chown(path, uid, gid)
 
     proc = subprocess.Popen(command, stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE, preexec_fn=PreExec(uid, gid, User))
+            stderr=subprocess.PIPE, preexec_fn=PreExec(uid, gid, User))
     exit_code = proc.wait()
-    Result = proc.stdout.read().decode('utf8', 'replace')
-    Print("stdout: " + Result)
-    LG().Log('INFO', "stdout: " + Result)
-    Print("stderr: " + proc.stderr.read().decode('utf8', 'replace'))
-    LG().Log('INFO', "stderr: " +
-             proc.stderr.read().decode('utf8', 'replace'))
+
+    stdoutread=proc.stdout.read().decode('utf8', 'replace')
+    stderrread=proc.stderr.read().decode('utf8', 'replace')
+
+    Print("stdout: " + stdoutread)
+    LG().Log('INFO', "stdout: " + stdoutread)
+    Print("stderr: " + stderrread)
+    LG().Log('INFO', "stderr: " + stderrread)
+
+    if exit_code != 0:
+         LG().Log('ERROR', "############# ERROR in get-script:\n" + GetScript)
 
     os.remove(path)
-    return [exit_code, GetScript, SetScript, TestScript, User, Group, Result]
+    return [exit_code, GetScript, SetScript, TestScript, User, Group, stdoutread]
 
 
 class TempWorkingDirectory:
@@ -339,7 +354,7 @@ class TempWorkingDirectory:
 
         os.chown(self.dir, uid, gid)
         os.chmod(self.dir, stat.S_IXUSR |
-                 stat.S_IRUSR | stat.S_IXGRP | stat.S_IRGRP)
+                stat.S_IRUSR | stat.S_IXGRP | stat.S_IRGRP)
 
     def __del__(self):
         shutil.rmtree(self.dir)
