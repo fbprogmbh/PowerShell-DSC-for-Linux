@@ -642,6 +642,13 @@ def Test(Ensure, PackageManager, Name, FilePath, PackageGroup, Arguments, Return
     installed, out = IsPackageInstalled(p)
     if (installed and Ensure == 'present') or (not installed and Ensure == 'absent'):
         return [0]
+
+    if (installed and Ensure == 'absent'):
+        LG().Log('ERROR', '##### Error: package ' + Name + ' should be absent, but is installed!')
+
+    if (not installed and Ensure == 'present'):
+        LG().Log('ERROR', '##### Error: package ' + Name + ' should be present, but is uninstalled!')
+        
     return [-1]
 
 
