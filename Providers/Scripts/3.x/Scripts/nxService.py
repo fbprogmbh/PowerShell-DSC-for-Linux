@@ -1333,12 +1333,14 @@ def Test(Name, Controller, Enabled, State):
     ShowMof('TEST', Name, Controller, Enabled, State)
     sc = ServiceContext(Name, Controller, Enabled, State)
 
+    return_status=[0]
+
     if sc.Controller == "systemd":
-        return TestSystemd(sc)
+        return_status = TestSystemd(sc)
     elif sc.Controller == "upstart":
-        return TestUpstart(sc)
+        return_status = TestUpstart(sc)
     elif sc.Controller == "init":
-        return TestInit(sc)
+        return_status = TestInit(sc)
     else:
         Print("Invalid service controller (" + sc.Controller +
               ") specified for service: " + sc.Name, file=sys.stderr)
@@ -1346,7 +1348,11 @@ def Test(Name, Controller, Enabled, State):
                  sc.Controller + ") specified for service: " + sc.Name)
         return [-1]
 
-    return [-1]
+    if return_status == [-1]:
+        LG().Log('ERROR', ' Service ' + Name + ' in a wrong state!')
+        return [-1]
+
+    return return_status
 
 
 def Get(Name, Controller, Enabled, State):
