@@ -6,7 +6,7 @@ from OmsConfigHostHelpers import write_omsconfig_host_telemetry, write_omsconfig
 import warnings
 with warnings.catch_warnings():
     warnings.filterwarnings("ignore",category=DeprecationWarning)
-    from imp                  import load_source
+import importlib.util
 from os.path              import dirname, isfile, join, realpath
 from time                 import sleep
 from fcntl                import flock, LOCK_EX, LOCK_UN, LOCK_NB
@@ -16,11 +16,15 @@ pathToCurrentScript = realpath(__file__)
 pathToCommonScriptsFolder = dirname(pathToCurrentScript)
 
 DSCLogPath = join(pathToCommonScriptsFolder, 'nxDSCLog.py')
-nxDSCLog = load_source('nxDSCLog', DSCLogPath)
+spec = importlib.util.spec_from_file_location('nxDSCLog', DSCLogPath)
+nxDSCLog = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(nxDSCLog)
 LG = nxDSCLog.DSCLog
 
 helperLibPath = join(pathToCommonScriptsFolder, 'helperlib.py')
-helperlib = load_source('helperlib', helperLibPath)
+spec = importlib.util.spec_from_file_location('helperlib', helperLibPath)
+helperlib = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(helperlib)
 
 omicli_path = join(helperlib.CONFIG_BINDIR, 'omicli')
 dsc_host_base_path = helperlib.DSC_HOST_BASE_PATH
@@ -47,7 +51,7 @@ if use_omsconfig_host:
 else:
     parameters.append(omicli_path)
     parameters.append("iv")
-    parameters.append("<DSC_NAMESPACE>")
+    parameters.append("root/Microsoft/DesiredStateConfiguration")
     parameters.append("{")
     parameters.append("MSFT_DSCLocalConfigurationManager")
     parameters.append("}")

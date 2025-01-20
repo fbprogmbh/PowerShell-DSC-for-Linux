@@ -10,11 +10,18 @@ from contextlib import contextmanager
 
 import os
 import sys
-import imp
+import importlib.util
 import tarfile
 import zipfile
-protocol = imp.load_source('protocol', '../protocol.py')
-nxDSCLog = imp.load_source('nxDSCLog', '../nxDSCLog.py')
+
+spec = importlib.util.spec_from_file_location('protocol', '../protocol.py')
+protocol = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(protocol)
+
+spec = importlib.util.spec_from_file_location('nxDSCLog', '../nxDSCLog.py')
+nxDSCLog = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(nxDSCLog)
+
 LG = nxDSCLog.DSCLog
 try:
     import hashlib

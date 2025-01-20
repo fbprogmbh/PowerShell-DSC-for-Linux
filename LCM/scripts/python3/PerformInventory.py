@@ -3,7 +3,7 @@ from fcntl                import flock, LOCK_EX, LOCK_UN, LOCK_NB
 import warnings
 with warnings.catch_warnings():
     warnings.filterwarnings("ignore",category=DeprecationWarning)
-    from imp        import load_source
+import importlib.util
 from os                   import listdir, system
 from os.path              import dirname, isfile, join, realpath
 from shutil               import move
@@ -18,16 +18,24 @@ pathToCurrentScript = realpath(__file__)
 pathToCommonScriptsFolder = dirname(pathToCurrentScript)
 
 helperLibPath = join(pathToCommonScriptsFolder, 'helperlib.py')
-helperlib = load_source('helperlib', helperLibPath)
+spec = importlib.util.spec_from_file_location('helperlib', helperLibPath)
+helperlib = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(helperlib)
+
 
 operationStatusUtilityPath = join(pathToCommonScriptsFolder, 'OperationStatusUtility.py')
-operationStatusUtility = load_source('operationStatusUtility', operationStatusUtilityPath)
+spec = importlib.util.spec_from_file_location('operationStatusUtility', operationStatusUtilityPath)
+operationStatusUtility = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(operationStatusUtility)
 
 operation = 'PerformInventory'
 
 # Redirect output to our log file
 fullPathDSCLogger = join(pathToCommonScriptsFolder, 'nxDSCLog.py')
-nxDSCLog = load_source('nxDSCLog', fullPathDSCLogger)
+spec = importlib.util.spec_from_file_location('nxDSCLog', fullPathDSCLogger)
+nxDSCLog = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(helperlib)
+
 logger = nxDSCLog.ConsoleAndFileLogger()
 stdout = logger
 

@@ -2,7 +2,7 @@
 import warnings
 with warnings.catch_warnings():
     warnings.filterwarnings("ignore",category=DeprecationWarning)
-    import imp
+import importlib.util
 import os
 import stat
 import shutil
@@ -15,16 +15,23 @@ pathToCurrentScript = realpath(__file__)
 pathToCommonScriptsFolder = dirname(pathToCurrentScript)
 
 helperLibPath = join(pathToCommonScriptsFolder, 'helperlib.py')
-helperlib = imp.load_source('helperlib', helperLibPath)
+spec = importlib.util.spec_from_file_location('helperlib', helperLibPath)
+helperlib = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(helperlib)
 
 fullPathDSCLogger = os.path.join(pathToCommonScriptsFolder, 'nxDSCLog.py')
-nxDSCLog = imp.load_source('nxDSCLog', fullPathDSCLogger)
+spec = importlib.util.spec_from_file_location('nxDSCLog', fullPathDSCLogger)
+nxDSCLog = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(nxDSCLog)
+
 logger = nxDSCLog.ConsoleAndFileLogger()
 sys.stdout = logger
 
 try:
     zipfileLibPath = join(helperlib.DSC_SCRIPT_PATH, 'zipfile2.6.py')
-    zipfile = imp.load_source('zipfile', zipfileLibPath)
+    spec = importlib.util.spec_from_file_location('zipfile', zipfileLibPath)
+    zipfile = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(zipfile)
 except:
     import zipfile
 

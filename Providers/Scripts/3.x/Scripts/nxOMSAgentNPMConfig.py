@@ -8,14 +8,25 @@ from contextlib import contextmanager
 import socket
 import os
 import sys
-import imp
 import hashlib
 import codecs
 import base64
 import platform
 import shutil
-protocol = imp.load_source('protocol', '../protocol.py')
-nxDSCLog = imp.load_source('nxDSCLog', '../nxDSCLog.py')
+import importlib.util
+
+spec = importlib.util.spec_from_file_location('protocol', '../protocol.py')
+protocol = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(protocol)
+
+spec = importlib.util.spec_from_file_location('nxDSCLog', '../nxDSCLog.py')
+nxDSCLog = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(nxDSCLog)
+
+spec = importlib.util.spec_from_file_location('helperlib', '../helperlib.py')
+helperlib = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(helperlib)
+
 LG = nxDSCLog.DSCLog
 
 # Paths

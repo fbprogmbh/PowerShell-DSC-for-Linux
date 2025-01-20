@@ -4,7 +4,6 @@ from errno      import EINVAL
 import warnings
 with warnings.catch_warnings():
     warnings.filterwarnings("ignore",category=DeprecationWarning)
-    from imp        import load_source
 from json       import dump
 from os         import chmod, mkdir, stat
 from os.path    import dirname, join, isdir, isfile, realpath

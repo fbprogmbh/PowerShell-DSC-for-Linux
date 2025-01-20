@@ -4,7 +4,6 @@
 # See license.txt for license information.
 # ====================================
 
-import imp
 import logging
 import configparser
 import logging.handlers
@@ -17,24 +16,36 @@ import time
 import shutil
 import pwd
 import traceback
+import importlib.util
 
+spec = importlib.util.spec_from_file_location('protocol', '../protocol.py')
+protocol = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(protocol)
 
-protocol = imp.load_source('protocol', '../protocol.py')
-nxDSCLog = imp.load_source('nxDSCLog', '../nxDSCLog.py')
+spec = importlib.util.spec_from_file_location('nxDSCLog', '../nxDSCLog.py')
+nxDSCLog = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(nxDSCLog)
+
+spec = importlib.util.spec_from_file_location('helperlib', '../helperlib.py')
+helperlib = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(helperlib)
+
 try:
-    serializerfactory = imp.load_source('serializerfactory',
-                                        '../../modules/nxOMSAutomationWorker/DSCResources/MSFT_nxOMSAutomationWorkerResource/automationworker/3.x/worker/serializerfactory.py')
+    spec = importlib.util.spec_from_file_location('serializerfactory','../../modules/nxOMSAutomationWorker/DSCResources/MSFT_nxOMSAutomationWorkerResource/automationworker/3.x/worker/serializerfactory.py')
+    serializerfactory = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(serializerfactory)
 except:
-    # this is the path when running tests
-    serializerfactory = imp.load_source('serializerfactory',
-                                        '../../nxOMSAutomationWorker/automationworker/3.x/worker/serializerfactory.py')
-
+    spec = importlib.util.spec_from_file_location('serializerfactory','../../nxOMSAutomationWorker/automationworker/3.x/worker/serializerfactory.py')
+    serializerfactory = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(serializerfactory)
 try:
-    linuxutil = imp.load_source('linuxutil',
-                                '../../modules/nxOMSAutomationWorker/DSCResources/MSFT_nxOMSAutomationWorkerResource/automationworker/3.x/worker/linuxutil.py')
+    spec = importlib.util.spec_from_file_location('linuxutil','../../modules/nxOMSAutomationWorker/DSCResources/MSFT_nxOMSAutomationWorkerResource/automationworker/3.x/worker/linuxutil.py')
+    linuxutil = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(linuxutil)
 except:
-    linuxutil = imp.load_source('linuxutil',
-                                '../../nxOMSAutomationWorker/automationworker/3.x/worker/linuxutil.py')
+    spec = importlib.util.spec_from_file_location('linuxutil','../../nxOMSAutomationWorker/automationworker/3.x/worker/linuxutil.py')
+    linuxutil = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(linuxutil)
 
 LG = nxDSCLog.DSCLog
 
