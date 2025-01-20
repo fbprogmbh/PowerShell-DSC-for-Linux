@@ -5,15 +5,22 @@
 # See license.txt for license information.
 # =======================
 import subprocess
-import imp
 import os
 import sys
 import socket
 import re
 from functools import reduce
+import importlib.util
 
-protocol = imp.load_source('protocol', '../protocol.py')
-nxDSCLog = imp.load_source('nxDSCLog', '../nxDSCLog.py')
+spec = importlib.util.spec_from_file_location('protocol', '../protocol.py')
+protocol = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(protocol)
+
+spec = importlib.util.spec_from_file_location('nxDSCLog', '../nxDSCLog.py')
+nxDSCLog = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(nxDSCLog)
+
+
 LG = nxDSCLog.DSCLog
 
 # [ClassVersion("1.0.0"), FriendlyName("nxFirewallResource")]

@@ -9,9 +9,12 @@ import sys
 import tempfile
 import re
 import platform
-import imp
+import importlib.util   
 import socket
-protocol=imp.load_source('protocol','../protocol.py')
+
+spec = importlib.util.spec_from_file_location('protocol', '../protocol.py')
+protocol = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(protocol)
 
 """
 Ubuntu/Debian: /etc/network/interfaces:dns-nameservers 8.8.8.8 8.8.4.4

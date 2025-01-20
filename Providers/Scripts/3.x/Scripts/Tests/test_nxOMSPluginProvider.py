@@ -4,8 +4,8 @@
 #============================================================================
 import os
 import sys
-import imp
 import ctypes
+import importlib.util
 
 try:
     import unittest2
@@ -14,7 +14,10 @@ except:
 
 sys.path.append('.:'+os.path.realpath('./Scripts'))
 os.chdir('../..')
-nxOMSPlugin=imp.load_source('nxOMSPlugin', './Scripts/nxOMSPlugin.py')
+
+spec = importlib.util.spec_from_file_location('nxOMSPlugin', './Scripts/nxOMSPlugin.py')
+nxOMSPlugin = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(nxOMSPlugin)
 
 class nxOMSPluginTestCases(unittest2.TestCase):
     """

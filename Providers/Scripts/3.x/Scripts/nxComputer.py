@@ -10,9 +10,16 @@ import sys
 import time
 import subprocess
 import re
-import imp
-protocol = imp.load_source('protocol', '../protocol.py')
-nxDSCLog = imp.load_source('nxDSCLog', '../nxDSCLog.py')
+import importlib.util
+
+spec = importlib.util.spec_from_file_location('protocol', '../protocol.py')
+protocol = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(protocol)
+
+spec = importlib.util.spec_from_file_location('nxDSCLog', '../nxDSCLog.py')
+nxDSCLog = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(nxDSCLog)
+
 LG = nxDSCLog.DSCLog
 try:
     import hashlib

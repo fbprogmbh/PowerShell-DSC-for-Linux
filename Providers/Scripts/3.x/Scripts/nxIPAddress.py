@@ -10,9 +10,13 @@ import sys
 import tempfile
 import re
 import platform
-import imp
 import socket
-protocol=imp.load_source('protocol','../protocol.py')
+import importlib.util
+
+spec = importlib.util.spec_from_file_location('protocol', '../protocol.py')
+protocol = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(protocol)
+
 
 """
 MOF:

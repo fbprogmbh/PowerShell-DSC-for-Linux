@@ -5,17 +5,20 @@ import os.path
 import tempfile
 import shutil
 from sys                  import argv
+import importlib.util
 from os.path import dirname, join, realpath
 import warnings
 with warnings.catch_warnings():
    warnings.filterwarnings("ignore",category=DeprecationWarning)
-   from imp        import load_source
 
 pathToCurrentScript = realpath(__file__)
 pathToCommonScriptsFolder = dirname(pathToCurrentScript)
 
 DSCLogPath = join(pathToCommonScriptsFolder, 'nxDSCLog.py')
-nxDSCLog = load_source('nxDSCLog', DSCLogPath)
+spec = importlib.util.spec_from_file_location('nxDSCLog', DSCLogPath)
+nxDSCLog = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(nxDSCLog)
+
 LG = nxDSCLog.DSCLog
 
 

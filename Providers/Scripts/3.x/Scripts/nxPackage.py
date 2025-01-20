@@ -9,11 +9,12 @@ import subprocess
 import os
 import sys
 import time
-import imp
 import urllib.request
 import copy
 import fnmatch
 import re
+import importlib.util
+
 apt = None
 rpm = None
 try:
@@ -25,9 +26,19 @@ if apt is None:
         import rpm
     except:
         pass
-protocol = imp.load_source('protocol', '../protocol.py')
-nxDSCLog = imp.load_source('nxDSCLog', '../nxDSCLog.py')
-helperlib = imp.load_source('helperlib', '../helperlib.py')
+
+spec = importlib.util.spec_from_file_location('protocol', '../protocol.py')
+protocol = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(protocol)
+
+spec = importlib.util.spec_from_file_location('nxDSCLog', '../nxDSCLog.py')
+nxDSCLog = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(nxDSCLog)
+
+spec = importlib.util.spec_from_file_location('helperlib', '../helperlib.py')
+helperlib = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(helperlib)
+
 LG = nxDSCLog.DSCLog
 
 # [ClassVersion("1.0.0"),FriendlyName("nxPackage"),SupportsInventory()]

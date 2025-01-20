@@ -8,12 +8,23 @@ from contextlib import contextmanager
 import os
 import sys
 import datetime
-import imp
 import copy
 import fnmatch
-protocol = imp.load_source('protocol', '../protocol.py')
-nxDSCLog = imp.load_source('nxDSCLog', '../nxDSCLog.py')
-helperlib = imp.load_source('helperlib', '../helperlib.py')
+
+import importlib.util
+
+spec = importlib.util.spec_from_file_location('protocol', '../protocol.py')
+protocol = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(protocol)
+
+spec = importlib.util.spec_from_file_location('nxDSCLog', '../nxDSCLog.py')
+nxDSCLog = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(nxDSCLog)
+
+spec = importlib.util.spec_from_file_location('helperlib', '../helperlib.py')
+helperlib = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(helperlib)
+
 LG = nxDSCLog.DSCLog
 
 # [ClassVersion("1.0.0"), FriendlyName("nxUser"),SupportsInventory()]

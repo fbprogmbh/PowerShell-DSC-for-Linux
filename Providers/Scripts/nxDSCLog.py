@@ -8,11 +8,15 @@ import sys
 import time
 import inspect
 import codecs
-import imp
+import importlib.util
 
 scriptFolderPath = os.path.dirname(os.path.realpath(__file__))
 fullPath = os.path.join(scriptFolderPath, 'helperlib.py')
-helperlib = imp.load_source('helperlib', fullPath)
+
+spec = importlib.util.spec_from_file_location('helperlib', fullPath)
+helperlib = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(helperlib)
+
 VarDir = helperlib.PYTHON_PID_DIR
 LogFile = VarDir + "/log/dsc.log"
 
