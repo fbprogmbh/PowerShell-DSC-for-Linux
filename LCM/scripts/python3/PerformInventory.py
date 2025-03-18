@@ -34,7 +34,7 @@ operation = 'PerformInventory'
 fullPathDSCLogger = join(pathToCommonScriptsFolder, 'nxDSCLog.py')
 spec = importlib.util.spec_from_file_location('nxDSCLog', fullPathDSCLogger)
 nxDSCLog = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(helperlib)
+spec.loader.exec_module(nxDSCLog)
 
 logger = nxDSCLog.ConsoleAndFileLogger()
 stdout = logger
