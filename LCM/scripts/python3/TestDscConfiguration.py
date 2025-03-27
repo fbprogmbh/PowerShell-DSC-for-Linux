@@ -11,6 +11,68 @@ from os.path              import dirname, isfile, join, realpath
 from time                 import sleep
 from fcntl                import flock, LOCK_EX, LOCK_UN, LOCK_NB
 from sys                  import argv
+import os
+import re
+import hashlib
+from pathlib import Path
+import json
+
+def parse_mof(file_path):
+    mof_data = Path(file_path).read_text(encoding='utf-8')
+    hash_to_resource_id = {}  # Dictionary to store MD5 hashes as keys and ResourceIDs as values
+    
+    resource_blocks = re.split(r'(?=instance of MSFT_)', mof_data)[1:]  # Skip first empty split
+    
+    for block in resource_blocks:
+        if 'MSFT_nxScriptResource' in block:
+            key_match = re.search(r'GetScript\s*=\s*"""(.*?)"""|GetScript\s*=\s*"(.*?)"', block, re.DOTALL)
+        elif 'MSFT_nxPackageResource' in block:
+            key_match = re.search(r'(?<=\s)Name\s*=\s*"(.*?)"', block)
+        elif 'MSFT_nxServiceResource' in block:
+            key_match = re.search(r'(?<=\s)Name\s*=\s*"(.*?)"', block)
+        elif 'MSFT_nxFileResource' in block:
+            key_match = re.search(r'(?<=\s)DestinationPath\s*=\s*"(.*?)"', block)
+        else:
+            continue  # Skip if neither resource type
+
+        if key_match:
+            key_value = key_match.group(1) or key_match.group(2)
+            key_value = key_value.replace('\n', r'\n')  # Normalize line breaks
+            
+            resource_id_match = re.search(r'ResourceID\s*=\s*"(.*?)"', block)
+            if resource_id_match:
+                resource_id = resource_id_match.group(1)
+                
+                md5_hash = hashlib.md5(key_value.encode('utf-8')).hexdigest()
+                
+                hash_to_resource_id[md5_hash] = resource_id
+    
+    return hash_to_resource_id
+
+def process_report(report_path, hash_to_resource_id):
+    resources_in_desired_state = []  # List to store ResourceIDs with state 0
+    resources_in_not_desired_state = []  # List to store ResourceIDs with state 1
+    
+    # Open and read the report file
+    with open(report_path, 'r') as report_file:
+        for line in report_file:
+            line = line.strip()
+            
+            if line:
+                md5_hash, state = line.split(':')
+                resource_id = hash_to_resource_id.get(md5_hash)
+                
+                if resource_id:
+                    if state == '0':
+                        resources_in_desired_state.append(resource_id)
+                    elif state == '1':
+                        resources_in_not_desired_state.append(resource_id)
+
+    return {
+        "ResourcesInDesiredState": resources_in_desired_state,
+        "ResourcesInNotDesiredState": resources_in_not_desired_state
+    }
+
 
 pathToCurrentScript = realpath(__file__)
 pathToCommonScriptsFolder = dirname(pathToCurrentScript)
@@ -60,6 +122,11 @@ else:
 stdout = ''
 stderr = ''
 
+report_path = "/var/opt/omi/run/report"
+
+if os.path.exists(report_path):
+        os.remove(report_path)
+        
 if use_omsconfig_host:
     if isfile(dsc_host_lock_path):
         try:
@@ -105,6 +172,7 @@ if use_omsconfig_host:
     else:
         write_omsconfig_host_log('dsc_host lock file does not exist. Skipping this operation until next consistency hits.', pathToCurrentScript, 'WARNING')
 else:
+        
     p = subprocess.Popen(parameters, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = p.communicate()
 
@@ -114,3 +182,16 @@ print(stdout)
 print(stderr)
 
 LG().Log("DEBUG", "End of script logic for " +  argv[0] + " runing with python " + str(sys.version_info))
+
+file_path = "/etc/opt/omi/conf/dsc/configuration/Current.mof"  # Replace with actual MOF file path
+
+hash_to_resource_id  = parse_mof(file_path)
+result_dict = process_report(report_path, hash_to_resource_id)
+
+print(json.dumps(hash_to_resource_id, indent=4))
+if os.path.exists(report_path):
+        os.remove(report_path)
+        
+result_json = json.dumps(result_dict, indent=4)
+
+print(result_json)
