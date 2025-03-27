@@ -11,11 +11,9 @@ import importlib.util
 from os.path              import dirname, isfile, join, realpath
 from fcntl                import flock, LOCK_EX, LOCK_UN, LOCK_NB
 from OmsConfigHostHelpers import write_omsconfig_host_telemetry, write_omsconfig_host_switch_event, write_omsconfig_host_log, stop_old_host_instances
+from time                 import sleep
 import subprocess
-import codecs
-import pprint
-import tempfile
-import os
+import codecs 
 
 pathToCurrentScript = realpath(__file__)
 pathToCommonScriptsFolder = dirname(pathToCurrentScript)
@@ -160,7 +158,7 @@ def main(argv):
     else:
         host_parameters.append(omicli_path)
         host_parameters.append("iv")
-        host_parameters.append("root/Microsoft/DesiredStateConfiguration")
+        host_parameters.append("<DSC_NAMESPACE>")
         host_parameters.append("{")
         host_parameters.append("MSFT_DSCLocalConfigurationManager")
         host_parameters.append("}")
@@ -185,28 +183,49 @@ def main(argv):
     stdout = ''
     stderr = ''
 
-    output_line = " ".join(host_parameters)
+    if use_omsconfig_host:
+        try:
+            stop_old_host_instances(dsc_host_lock_path)
 
-    omicli_path = join(helperlib.CONFIG_BINDIR, 'omiclifile')
+            # Open the dsc host lock file. This also creates a file if it does not exist
+            dschostlock_filehandle = open(dsc_host_lock_path, 'w')
+            print("Opened the dsc host lock file at the path '" + dsc_host_lock_path + "'")
+            
+            dschostlock_acquired = False
 
-    parameters = []
-    parameters.append(omicli_path)
+            # Acquire dsc host file lock
+            for retry in range(10):
+                try:
+                    flock(dschostlock_filehandle, LOCK_EX | LOCK_NB)
+                    dschostlock_acquired = True
+                    break
+                except IOError:
+                    write_omsconfig_host_log('dsc_host lock file not acquired. retry (#' + str(retry) + ') after 60 seconds...', pathToCurrentScript)
+                    sleep(60)
 
-    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as file:
-        parameters.append(file.name)
-        file.write(output_line)
+            if dschostlock_acquired:
+                p = subprocess.Popen(parameters, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                stdout, stderr = p.communicate()
+                stdout = stdout.decode() if isinstance(stdout, bytes) else stdout
+                print(stdout)
+            else:
+                print("dsc host lock already acuired by a different process")
+        finally:
+            if (dschostlock_filehandle):
+                # Release dsc host file lock
+                flock(dschostlock_filehandle, LOCK_UN)
 
-    p = subprocess.Popen(parameters, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = p.communicate()
-
-    os.remove(file.name)
+                # Close dsc host lock file handle
+                dschostlock_filehandle.close()
+    else:
+        p = subprocess.Popen(host_parameters, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = p.communicate()
 
     stdout = stdout.decode() if isinstance(stdout, bytes) else stdout
     stderr = stderr.decode() if isinstance(stderr, bytes) else stderr
     print(stdout)   
     print(stderr)
 
-    
 LG().Log("DEBUG", "Starting Main method for " + argv[0] + " runing with python " + str(sys.version_info))
 main(argv[1:])
 LG().Log("DEBUG", "End of Main method for " +  argv[0] + " runing with python " + str(sys.version_info))
