@@ -28,7 +28,7 @@ spec.loader.exec_module(helperlib)
 
 operationStatusUtilityPath = join(pathToCommonScriptsFolder, 'OperationStatusUtility.py')
 spec = importlib.util.spec_from_file_location('operationStatusUtility', operationStatusUtilityPath)
-operationStatusUtility = mportlib.util.module_from_spec(spec)
+operationStatusUtility = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(operationStatusUtility)
 
 operation = 'PerformConsistency'

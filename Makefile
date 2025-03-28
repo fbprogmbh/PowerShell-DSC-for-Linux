@@ -1,6 +1,7 @@
 SHELL=/bin/bash
+OMI_PREFIX := omi-1.9.1
 include config.mak
--include omi-1.9.0/output/config.mak
+-include $(OMI_PREFIX)/output/config.mak
 UNAME_M := $(shell uname -m)
 ifeq ($(UNAME_M),x86_64)
  PF_ARCH := x64
@@ -44,25 +45,25 @@ else
  endif
 	cd ../pal/build; ./configure --enable-ulinux
  ifeq ($(BUILD_SSL_098),1)
-	rm -rf omi-1.9.0/output_openssl_0.9.8/lib/libdsccore.so
+	rm -rf $(OMI_PREFIX)/output_openssl_0.9.8/lib/libdsccore.so
 	$(MAKE) omi098
 	$(MAKE) dsc098
 	$(MAKE) dsckit098
  endif
  ifeq ($(BUILD_SSL_100),1)
-	rm -rf omi-1.9.0/output_openssl_1.0.0/lib/libdsccore.so
+	rm -rf $(OMI_PREFIX)/output_openssl_1.0.0/lib/libdsccore.so
 	$(MAKE) omi100
 	$(MAKE) dsc100
 	$(MAKE) dsckit100
  endif
  ifeq ($(BUILD_SSL_110),1)
-	rm -rf omi-1.9.0/output_openssl_1.1.0/lib/libdsccore.so
+	rm -rf $(OMI_PREFIX)/output_openssl_1.1.0/lib/libdsccore.so
 	$(MAKE) omi110
 	$(MAKE) dsc110
 	$(MAKE) dsckit110
  endif
  ifeq ($(BUILD_SSL_300),1)
-	rm -rf omi-1.9.0/output_openssl_3.0.0/lib/libdsccore.so
+	rm -rf $(OMI_PREFIX)/output_openssl_3.0.0/lib/libdsccore.so
 	$(MAKE) omi300
 	$(MAKE) dsc300
 	$(MAKE) dsckit300
@@ -79,7 +80,9 @@ endif
 	$(MAKE) -C $(INSTALLBUILDER_DIR) SSL_VERSION=098 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) BUILD_OMS_VAL=$(BUILD_OMS_VAL)
 
 	-mkdir -p release; \
-	cp omi-1.9.0/output_openssl_0.9.8/release/*.{rpm,deb} output/release/*.{rpm,deb} release/
+	cp $(OMI_PREFIX)/output_openssl_0.9.8/release/*.rpm output/release/*.rpm release/ 2>/dev/null || true
+	cp $(OMI_PREFIX)/output_openssl_0.9.8/release/*.deb output/release/*.deb release/ 2>/dev/null || true
+
 
 ifeq ($(BUILD_OMS),BUILD_OMS)
 dsckit100: nx nxOMSPerfCounter nxOMSSyslog nxOMSKeyMgmt nxOMSPlugin nxOMSCustomLog nxOMSSudoCustomLog nxFileInventory nxOMSGenerateInventoryMof nxOMSAgentNPMConfig nxOMSAutomationWorker nxOMSAuditdPlugin nxOMSContainers nxOMSWLI
@@ -89,7 +92,9 @@ endif
 	$(MAKE) -C $(INSTALLBUILDER_DIR) SSL_VERSION=100 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) BUILD_OMS_VAL=$(BUILD_OMS_VAL)
 
 	-mkdir -p release; \
-	cp omi-1.9.0/output_openssl_1.0.0/release/*.{rpm,deb} output/release/*.{rpm,deb} release/
+	cp $(OMI_PREFIX)/output_openssl_1.0.0/release/*.rpm output/release/*.rpm release/ 2>/dev/null || true
+	cp $(OMI_PREFIX)/output_openssl_1.0.0/release/*.deb output/release/*.deb release/ 2>/dev/null || true
+
 
 ifeq ($(BUILD_OMS),BUILD_OMS)
 dsckit110: nx nxOMSPerfCounter nxOMSSyslog nxOMSKeyMgmt nxOMSPlugin nxOMSCustomLog nxOMSSudoCustomLog nxFileInventory nxOMSGenerateInventoryMof nxOMSAgentNPMConfig nxOMSAutomationWorker nxOMSAuditdPlugin
@@ -99,7 +104,9 @@ endif
 	$(MAKE) -C $(INSTALLBUILDER_DIR) SSL_VERSION=110 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) BUILD_OMS_VAL=$(BUILD_OMS_VAL)
 
 	-mkdir -p release; \
-	cp omi-1.9.0/output_openssl_1.1.0/release/*.{rpm,deb} output/release/*.{rpm,deb} release/
+	cp $(OMI_PREFIX)/output_openssl_1.1.0/release/*.rpm output/release/*.rpm release/ 2>/dev/null || true
+	cp $(OMI_PREFIX)/output_openssl_1.1.0/release/*.deb output/release/*.deb release/ 2>/dev/null || true
+
 
 ifeq ($(BUILD_OMS),BUILD_OMS)
 dsckit300: nx nxOMSPerfCounter nxOMSSyslog nxOMSKeyMgmt nxOMSPlugin nxOMSCustomLog nxOMSSudoCustomLog nxFileInventory nxOMSGenerateInventoryMof nxOMSAgentNPMConfig nxOMSAutomationWorker nxOMSAuditdPlugin
@@ -109,7 +116,9 @@ endif
 	$(MAKE) -C $(INSTALLBUILDER_DIR) SSL_VERSION=300 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) BUILD_OMS_VAL=$(BUILD_OMS_VAL)
 
 	-mkdir -p release; \
-	cp omi-1.9.0/output_openssl_3.0.0/release/*.{rpm,deb} output/release/*.{rpm,deb} release/
+	cp $(OMI_PREFIX)/output_openssl_3.0.0/release/*.rpm output/release/*.rpm release/ 2>/dev/null || true
+	cp $(OMI_PREFIX)/output_openssl_3.0.0/release/*.deb output/release/*.deb release/ 2>/dev/null || true
+
 
 ifeq ($(BUILD_OMS),BUILD_OMS)
 dsckit300: nx nxOMSPerfCounter nxOMSSyslog nxOMSKeyMgmt nxOMSPlugin nxOMSCustomLog nxOMSSudoCustomLog nxFileInventory nxOMSGenerateInventoryMof nxOMSAgentNPMConfig nxOMSAutomationWorker nxOMSAuditdPlugin
@@ -119,7 +128,9 @@ endif
 	$(MAKE) -C $(INSTALLBUILDER_DIR) SSL_VERSION=300 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) BUILD_OMS_VAL=$(BUILD_OMS_VAL)
 
 	-mkdir -p release; \
-	cp omi-1.9.0/output_openssl_3.0.0/release/*.{rpm,deb} output/release/*.{rpm,deb} release/
+	cp $(OMI_PREFIX)/output_openssl_3.0.0/release/*.rpm output/release/*.rpm release/ 2>/dev/null || true
+	cp $(OMI_PREFIX)/output_openssl_3.0.0/release/*.deb output/release/*.deb release/ 2>/dev/null || true
+
 
 ifeq ($(BUILD_OMS),BUILD_OMS)
 dsckit300: nx nxOMSPerfCounter nxOMSSyslog nxOMSKeyMgmt nxOMSPlugin nxOMSCustomLog nxOMSSudoCustomLog nxFileInventory nxOMSGenerateInventoryMof nxOMSAgentNPMConfig nxOMSAutomationWorker nxOMSAuditdPlugin
@@ -129,13 +140,15 @@ endif
 	$(MAKE) -C $(INSTALLBUILDER_DIR) SSL_VERSION=300 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) BUILD_OMS_VAL=$(BUILD_OMS_VAL)
 
 	-mkdir -p release; \
-	cp omi-1.9.0/output_openssl_3.0.0/release/*.{rpm,deb} output/release/*.{rpm,deb} release/
+	cp $(OMI_PREFIX)/output_openssl_3.0.0/release/*.rpm output/release/*.rpm release/ 2>/dev/null || true
+	cp $(OMI_PREFIX)/output_openssl_3.0.0/release/*.deb output/release/*.deb release/ 2>/dev/null || true
+
 
 dsc098: lcm098 providers
 	mkdir -p intermediate/Scripts
 	mkdir -p intermediate/Scripts/python3
 	mkdir -p intermediate/Modules
-	.  omi-1.9.0/output_openssl_0.9.8/config.mak; \
+	.  $(OMI_PREFIX)/output_openssl_0.9.8/config.mak; \
 	for f in LCM/scripts/*.py LCM/scripts/*.sh Providers/Scripts/*.py Providers/Scripts/*.sh; do \
 	  cat $$f | \
 	  sed "s@<CONFIG_BINDIR>@$$CONFIG_BINDIR@" | \
@@ -179,7 +192,7 @@ dsc100: lcm100 providers
 	mkdir -p intermediate/Scripts
 	mkdir -p intermediate/Scripts/python3
 	mkdir -p intermediate/Modules
-	.  omi-1.9.0/output_openssl_1.0.0/config.mak; \
+	.  $(OMI_PREFIX)/output_openssl_1.0.0/config.mak; \
 	for f in LCM/scripts/*.py LCM/scripts/*.sh Providers/Scripts/*.py Providers/Scripts/*.sh; do \
 	  cat $$f | \
 	  sed "s@<CONFIG_BINDIR>@$$CONFIG_BINDIR@" | \
@@ -222,7 +235,7 @@ dsc110: lcm110 providers
 	mkdir -p intermediate/Scripts
 	mkdir -p intermediate/Scripts/python3
 	mkdir -p intermediate/Modules
-	.  omi-1.9.0/output_openssl_1.1.0/config.mak; \
+	.  $(OMI_PREFIX)/output_openssl_1.1.0/config.mak; \
 	for f in LCM/scripts/*.py LCM/scripts/*.sh Providers/Scripts/*.py Providers/Scripts/*.sh; do \
 	  cat $$f | \
 	  sed "s@<CONFIG_BINDIR>@$$CONFIG_BINDIR@" | \
@@ -266,7 +279,7 @@ dsc300: lcm300 providers
 	mkdir -p intermediate/Scripts
 	mkdir -p intermediate/Scripts/python3
 	mkdir -p intermediate/Modules
-	.  omi-1.9.0/output_openssl_3.0.0/config.mak; \
+	.  $(OMI_PREFIX)/output_openssl_3.0.0/config.mak; \
 	for f in LCM/scripts/*.py LCM/scripts/*.sh Providers/Scripts/*.py Providers/Scripts/*.sh; do \
 	  cat $$f | \
 	  sed "s@<CONFIG_BINDIR>@$$CONFIG_BINDIR@" | \
@@ -308,43 +321,43 @@ dsc300: lcm300 providers
 
 omi098:
 	$(MAKE) configureomi098
-	rm -rf omi-1.9.0/output
-	ln -s output_openssl_0.9.8 omi-1.9.0/output
-	$(MAKE) -C omi-1.9.0
-	$(MAKE) -C omi-1.9.0/installbuilder SSL_VERSION=098 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) SSL_BUILD=0.9.8
+	rm -rf $(OMI_PREFIX)/output
+	ln -s output_openssl_0.9.8 $(OMI_PREFIX)/output
+	$(MAKE) -C $(OMI_PREFIX)
+	$(MAKE) -C $(OMI_PREFIX)/installbuilder SSL_VERSION=098 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) SSL_BUILD=0.9.8
 
 omi100:
 	$(MAKE) configureomi100
-	rm -rf omi-1.9.0/output
-	ln -s output_openssl_1.0.0 omi-1.9.0/output
-	$(MAKE) -C omi-1.9.0
-	$(MAKE) -C omi-1.9.0/installbuilder SSL_VERSION=100 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) SSL_BUILD=1.0.0
+	rm -rf $(OMI_PREFIX)/output
+	ln -s output_openssl_1.0.0 $(OMI_PREFIX)/output
+	$(MAKE) -C $(OMI_PREFIX)
+	$(MAKE) -C $(OMI_PREFIX)/installbuilder SSL_VERSION=100 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) SSL_BUILD=1.0.0
 
 omi110:
 	$(MAKE) configureomi110
-	rm -rf omi-1.9.0/output
-	ln -s output_openssl_1.1.0 omi-1.9.0/output
-	$(MAKE) -C omi-1.9.0
-	$(MAKE) -C omi-1.9.0/installbuilder SSL_VERSION=110 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) SSL_BUILD=1.1.0
+	rm -rf $(OMI_PREFIX)/output
+	ln -s output_openssl_1.1.0 $(OMI_PREFIX)/output
+	$(MAKE) -C $(OMI_PREFIX)
+	$(MAKE) -C $(OMI_PREFIX)/installbuilder SSL_VERSION=110 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) SSL_BUILD=1.1.0
 
 omi300:
 	$(MAKE) configureomi300
-	rm -rf omi-1.9.0/output
-	ln -s output_openssl_3.0.0 omi-1.9.0/output
-	$(MAKE) -C omi-1.9.0
-	$(MAKE) -C omi-1.9.0/installbuilder SSL_VERSION=300 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) SSL_BUILD=3.0.0
+	rm -rf $(OMI_PREFIX)/output
+	ln -s output_openssl_3.0.0 $(OMI_PREFIX)/output
+	$(MAKE) -C $(OMI_PREFIX)
+	$(MAKE) -C $(OMI_PREFIX)/installbuilder SSL_VERSION=300 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) SSL_BUILD=3.0.0
 
 configureomi098:
-	(cd omi-1.9.0; ./configure $(DEBUG_FLAGS) --enable-preexec --prefix=/opt/omi --outputdirname=output_openssl_0.9.8 --localstatedir=/var/opt/omi --sysconfdir=/etc/opt/omi/conf --certsdir=/etc/opt/omi/ssl --opensslcflags="$(openssl098_cflags)" --openssllibs="-L$(current_dir)/ext/curl/current_platform/lib $(openssl098_libs)" --openssllibdir="$(openssl098_libdir)")
+	(cd $(OMI_PREFIX); ./configure $(DEBUG_FLAGS) --enable-preexec --prefix=/opt/omi --outputdirname=output_openssl_0.9.8 --localstatedir=/var/opt/omi --sysconfdir=/etc/opt/omi/conf --certsdir=/etc/opt/omi/ssl --opensslcflags="$(openssl098_cflags)" --openssllibs="-L$(current_dir)/ext/curl/current_platform/lib $(openssl098_libs)" --openssllibdir="$(openssl098_libdir)")
 
 configureomi100:
-	(cd omi-1.9.0; ./configure $(DEBUG_FLAGS) --enable-preexec --prefix=/opt/omi --outputdirname=output_openssl_1.0.0 --localstatedir=/var/opt/omi --sysconfdir=/etc/opt/omi/conf --certsdir=/etc/opt/omi/ssl --opensslcflags="$(openssl100_cflags)" --openssllibs="-L$(current_dir)/ext/curl/current_platform/lib $(openssl100_libs)" --openssllibdir="$(openssl100_libdir)")
+	(cd $(OMI_PREFIX); ./configure $(DEBUG_FLAGS) --enable-preexec --prefix=/opt/omi --outputdirname=output_openssl_1.0.0 --localstatedir=/var/opt/omi --sysconfdir=/etc/opt/omi/conf --certsdir=/etc/opt/omi/ssl --opensslcflags="$(openssl100_cflags)" --openssllibs="-L$(current_dir)/ext/curl/current_platform/lib $(openssl100_libs)" --openssllibdir="$(openssl100_libdir)")
 
 configureomi110:
-	(cd omi-1.9.0; ./configure $(DEBUG_FLAGS) --enable-preexec --prefix=/opt/omi --outputdirname=output_openssl_1.1.0 --localstatedir=/var/opt/omi --sysconfdir=/etc/opt/omi/conf --certsdir=/etc/opt/omi/ssl --opensslcflags="$(openssl110_cflags)" --openssllibs="-L$(current_dir)/ext/curl/current_platform/lib $(openssl110_libs)" --openssllibdir="$(openssl110_libdir)")
+	(cd $(OMI_PREFIX); ./configure $(DEBUG_FLAGS) --enable-preexec --prefix=/opt/omi --outputdirname=output_openssl_1.1.0 --localstatedir=/var/opt/omi --sysconfdir=/etc/opt/omi/conf --certsdir=/etc/opt/omi/ssl --opensslcflags="$(openssl110_cflags)" --openssllibs="-L$(current_dir)/ext/curl/current_platform/lib $(openssl110_libs)" --openssllibdir="$(openssl110_libdir)")
 
 configureomi300:
-	(cd omi-1.9.0; ./configure $(DEBUG_FLAGS) --enable-microsoft --outputdirname=output_openssl_3.0.0)
+	(cd $(OMI_PREFIX); ./configure $(DEBUG_FLAGS) --enable-microsoft --outputdirname=output_openssl_3.0.0)
 
 
 lcm098:
@@ -773,18 +786,18 @@ nxOMSWLI:
 	mv $@_$${VERSION}.zip ../../release/
 
 distclean: clean
-	rm -rf omi-1.9.0/output
-	rm -rf omi-1.9.0/output_openssl_0.9.8
-	rm -rf omi-1.9.0/output_openssl_1.0.0
-	rm -rf omi-1.9.0/output_openssl_1.1.0
-	rm -rf omi-1.9.0/output_openssl_3.0.0
+	rm -rf $(OMI_PREFIX)/output
+	rm -rf $(OMI_PREFIX)/output_openssl_0.9.8
+	rm -rf $(OMI_PREFIX)/output_openssl_1.0.0
+	rm -rf $(OMI_PREFIX)/output_openssl_1.1.0
+	rm -rf $(OMI_PREFIX)/output_openssl_3.0.0
 
 clean:
 ifeq ($(BUILD_LOCAL),1)
 	$(MAKE) -C LCM clean
 	$(MAKE) -C Providers clean
-	$(MAKE) -C omi-1.9.0 distclean
-	rm -rf omi-1.9.0/output
+	$(MAKE) -C $(OMI_PREFIX) distclean
+	rm -rf $(OMI_PREFIX)/output
 	rm -rf output
 	rm -rf release
 	rm -rf intermediate
@@ -804,7 +817,7 @@ local:
 	mkdir -p intermediate/Modules
 	$(MAKE) lcm providers
 lcm:
-	$(MAKE) -C omi-1.9.0
+	$(MAKE) -C $(OMI_PREFIX)
 	$(MAKE) -C LCM
 
 reg: lcmreg providersreg
@@ -813,7 +826,7 @@ lcmreg:
 	$(MAKE) -C LCM deploydsc
 
 providersreg:
-		.  omi-1.9.0/output/config.mak; \
+		.  $(OMI_PREFIX)/output/config.mak; \
 		for f in LCM/scripts/*.py LCM/scripts/*.sh Providers/Scripts/*.py Providers/Scripts/*.sh; do \
 		  cat $$f | \
 		  sed "s@<CONFIG_BINDIR>@$(CONFIG_BINDIR)@" | \
