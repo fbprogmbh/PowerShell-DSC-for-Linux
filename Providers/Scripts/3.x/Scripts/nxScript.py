@@ -300,7 +300,7 @@ def Test(GetScript, SetScript, TestScript, User, Group):
 
     os.remove(path)
     
-    get_script = GetScript.replace('\n', r'\n')
+    get_script = GetScript.replace('\n', '').replace(r'\n', '').replace(r'\"', '"') 
     md5_hash = hashlib.md5(get_script.encode()).hexdigest()
     file_path = "/var/opt/omi/run/report"
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -384,3 +384,4 @@ class TempWorkingDirectory:
 
     def GetTempPath(self):
         return os.path.join(self.dir, "temp_script.sh")
+

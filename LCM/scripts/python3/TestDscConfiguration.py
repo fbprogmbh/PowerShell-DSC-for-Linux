@@ -23,29 +23,33 @@ def parse_mof(file_path):
     
     resource_blocks = re.split(r'(?=instance of MSFT_)', mof_data)[1:]  # Skip first empty split
     
+    pattern = ''
+    
     for block in resource_blocks:
         if 'MSFT_nxScriptResource' in block:
-            key_match = re.search(r'GetScript\s*=\s*"""(.*?)"""|GetScript\s*=\s*"(.*?)"', block, re.DOTALL)
+            pattern = r'(?<=\s)GetScript\s*=\s*"(.*)";'
         elif 'MSFT_nxPackageResource' in block:
-            key_match = re.search(r'(?<=\s)Name\s*=\s*"(.*?)"', block)
+            pattern = r'(?<=\s)Name\s*=\s*"(.*?)"'
         elif 'MSFT_nxServiceResource' in block:
-            key_match = re.search(r'(?<=\s)Name\s*=\s*"(.*?)"', block)
+            pattern = r'(?<=\s)Name\s*=\s*"(.*?)"'
         elif 'MSFT_nxFileResource' in block:
-            key_match = re.search(r'(?<=\s)DestinationPath\s*=\s*"(.*?)"', block)
+            pattern = r'(?<=\s)DestinationPath\s*=\s*"(.*?)"'
         else:
+            print("nothing found!")
             continue  # Skip if neither resource type
 
+        key_match = re.search(pattern, block)
         if key_match:
-            key_value = key_match.group(1) or key_match.group(2)
-            key_value = key_value.replace('\n', r'\n')  # Normalize line breaks
+            key_value = key_match.group(1)
+            key_value = key_value.replace('\n', '').replace(r'\n', '').replace(r'\"', '"')
             
             resource_id_match = re.search(r'ResourceID\s*=\s*"(.*?)"', block)
             if resource_id_match:
                 resource_id = resource_id_match.group(1)
-                
                 md5_hash = hashlib.md5(key_value.encode('utf-8')).hexdigest()
-                
                 hash_to_resource_id[md5_hash] = resource_id
+        else:
+            print ('nothing found')
     
     return hash_to_resource_id
 
@@ -67,6 +71,10 @@ def process_report(report_path, hash_to_resource_id):
                         resources_in_desired_state.append(resource_id)
                     elif state == '1':
                         resources_in_not_desired_state.append(resource_id)
+                else:
+                     LG().Log("ERROR","could not lookup key " + md5_hash);
+                     print("ERROR","could not lookup key " + md5_hash);
+
 
     return {
         "ResourcesInDesiredState": resources_in_desired_state,
@@ -188,10 +196,11 @@ file_path = "/etc/opt/omi/conf/dsc/configuration/Current.mof"  # Replace with ac
 hash_to_resource_id  = parse_mof(file_path)
 result_dict = process_report(report_path, hash_to_resource_id)
 
-print(json.dumps(hash_to_resource_id, indent=4))
+#print(json.dumps(hash_to_resource_id, indent=4))
 if os.path.exists(report_path):
         os.remove(report_path)
         
 result_json = json.dumps(result_dict, indent=4)
 
 print(result_json)
+
