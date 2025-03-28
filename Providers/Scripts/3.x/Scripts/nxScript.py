@@ -300,14 +300,14 @@ def Test(GetScript, SetScript, TestScript, User, Group):
 
     os.remove(path)
     
-    get_script = GetScript.replace('\n', '').replace(r'\n', '').replace(r'\"', '"') 
+    get_script = GetScript.replace('\n', '').replace(r'\n', '').replace(r'\"', '"').replace("\\", "")
     md5_hash = hashlib.md5(get_script.encode()).hexdigest()
     file_path = "/var/opt/omi/run/report"
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     
     with open(file_path, "a") as f:
         f.write(f"{md5_hash}:{exit_code}\n")
-        
+       
     return [exit_code]
 
 

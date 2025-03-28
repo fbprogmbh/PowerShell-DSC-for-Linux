@@ -41,7 +41,7 @@ def parse_mof(file_path):
         key_match = re.search(pattern, block)
         if key_match:
             key_value = key_match.group(1)
-            key_value = key_value.replace('\n', '').replace(r'\n', '').replace(r'\"', '"')
+            key_value = key_value.replace('\n', '').replace(r'\n', '').replace(r'\"', '"').replace("\\", "")
             
             resource_id_match = re.search(r'ResourceID\s*=\s*"(.*?)"', block)
             if resource_id_match:
@@ -69,7 +69,7 @@ def process_report(report_path, hash_to_resource_id):
                 if resource_id:
                     if state == '0':
                         resources_in_desired_state.append(resource_id)
-                    elif state == '1':
+                    else:
                         resources_in_not_desired_state.append(resource_id)
                 else:
                      LG().Log("ERROR","could not lookup key " + md5_hash);
@@ -196,7 +196,6 @@ file_path = "/etc/opt/omi/conf/dsc/configuration/Current.mof"  # Replace with ac
 hash_to_resource_id  = parse_mof(file_path)
 result_dict = process_report(report_path, hash_to_resource_id)
 
-#print(json.dumps(hash_to_resource_id, indent=4))
 if os.path.exists(report_path):
         os.remove(report_path)
         

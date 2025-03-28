@@ -1030,7 +1030,7 @@ def Test(DestinationPath, SourcePath, Ensure, Type, Force, Contents, Checksum, R
     
     with open(file_path, "a") as f:
         f.write(f"{md5_hash}:{exit_code}\n")
-        
+    
     return [exit_code]
 
 
