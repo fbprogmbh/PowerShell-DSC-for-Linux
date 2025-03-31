@@ -15,7 +15,7 @@ import subprocess
 import codecs
 import pprint
 import tempfile
-import os
+import os 
 
 pathToCurrentScript = realpath(__file__)
 pathToCommonScriptsFolder = dirname(pathToCurrentScript)
