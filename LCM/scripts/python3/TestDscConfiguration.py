@@ -16,6 +16,7 @@ import re
 import hashlib
 from pathlib import Path
 import json
+import argparse
 
 def parse_mof(file_path):
     mof_data = Path(file_path).read_text(encoding='utf-8')
@@ -78,8 +79,26 @@ def process_report(report_path, hash_to_resource_id):
 
     return {
         "ResourcesInDesiredState": resources_in_desired_state,
-        "ResourcesInNotDesiredState": resources_in_not_desired_state
+        "ResourcesInNotDesiredState": resources_in_not_desired_state,
+        "InDesiredState": not resources_in_not_desired_state
     }
+
+
+legacy_output = False
+
+file_path = "/etc/opt/omi/conf/dsc/configuration/Current.mof"
+
+if not legacy_output:
+    parser = argparse.ArgumentParser(description="Process configuration file path.")
+    parser.add_argument("-c", "-configurationmof", dest="file_path", help="Path to the configuration file")
+
+    args = parser.parse_args()
+
+    if args.file_path:
+        file_path = args.file_path
+        if not os.path.exists(file_path):
+            print(f"Error: The specified file '{args.file_path}' does not exist.", file=sys.stderr)
+            sys.exit(1)
 
 
 pathToCurrentScript = realpath(__file__)
@@ -187,9 +206,6 @@ else:
 stdout = stdout.decode() if isinstance(stdout, bytes) else stdout
 stderr = stderr.decode() if isinstance(stderr, bytes) else stderr
 
-legacy_output = False
-
-file_path = "/etc/opt/omi/conf/dsc/configuration/Current.mof"
 
 LG().Log("DEBUG", "End of script logic for " +  argv[0] + " runing with python " + str(sys.version_info))
 
@@ -199,11 +215,16 @@ if "OMI_Error" in stderr or "OMI_Error" in stdout or not os.path.exists(file_pat
 else:
     hash_to_resource_id  = parse_mof(file_path)
     result_dict = process_report(report_path, hash_to_resource_id)
-    result_dict["InDesiredState"] = not result_dict.get("ResourcesInNotDesiredState", [])
 
     if os.path.exists(report_path):
         os.remove(report_path)
 
+    in_desired_state = "InDesiredState=true" in stdout
+    
+    if result_dict["InDesiredState"] != in_desired_state:
+        print("Error: Mismatch between result_dict[\"InDesiredState\"] and stdout content!", file=sys.stderr)
+        sys.exit(1)
+    
     result_json = json.dumps(result_dict, indent=4)
     print(result_json)
 
