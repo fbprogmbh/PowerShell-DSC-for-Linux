@@ -856,7 +856,10 @@ MI_EXTERN_C PAL_Uint32 THREAD_API Invoke_TestConfiguration_Internal(void *param)
     }
 
     SetLCMStatusBusy();
-    miResult = CallTestConfiguration(&testStatus, &resourceId, args->context, &cimErrorDetails);
+    miResult = CallTestConfiguration(&testStatus, 
+    &resourceId, 
+    args->context, 
+    &cimErrorDetails);
     if (miResult != MI_RESULT_OK)
     {
         MSFT_DSCLocalConfigurationManager_TestConfiguration_Destruct(&outputObject);

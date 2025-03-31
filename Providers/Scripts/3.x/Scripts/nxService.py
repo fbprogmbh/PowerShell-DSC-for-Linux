@@ -16,6 +16,7 @@ import re
 import fnmatch
 from functools import reduce
 import importlib.util
+import hashlib
 
 spec = importlib.util.spec_from_file_location('protocol', '../protocol.py')
 protocol = importlib.util.module_from_spec(spec)
@@ -1361,6 +1362,13 @@ def Test(Name, Controller, Enabled, State):
     if return_status == [-1]:
         LG().Log('ERROR', ' Service ' + Name + ' in a wrong state!')
         return [-1]
+    
+    md5_hash = hashlib.md5(Name.encode()).hexdigest()
+    file_path = "/var/opt/omi/run/report"
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    
+    with open(file_path, "a") as f:
+        f.write(f"{md5_hash}:{return_status[0]}\n")
 
     return return_status
 

@@ -1006,23 +1006,32 @@ def Test(DestinationPath, SourcePath, Ensure, Type, Force, Contents, Checksum, R
     if not DestinationPath:
         return [-1]
 
+    exit_code = 0
+    
     if fc.Ensure == "present":
         if fc.Type == "file":
             if TestFile(DestinationPath, SourcePath, fc) is False:
-                return [-1]
+                exit_code = -1
         elif fc.Type == "directory":
             if TestDirectory(DestinationPath, SourcePath, fc) is False:
-                return [-1]
+                exit_code = -1
         elif fc.Type == "link":
             if TestLink(DestinationPath, SourcePath, fc) is False:
-                return [-1]
+                exit_code = -1
     elif fc.Ensure == "absent":
         if os.path.exists(DestinationPath):
-            return [-1]
+            exit_code = -1
+        else:
+            exit_code = 0
 
-        return [0]
-
-    return [0]
+    md5_hash = hashlib.md5(DestinationPath.encode()).hexdigest()
+    file_path = "/var/opt/omi/run/report"
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    
+    with open(file_path, "a") as f:
+        f.write(f"{md5_hash}:{exit_code}\n")
+    
+    return [exit_code]
 
 
 def Get(DestinationPath, SourcePath, Ensure, Type, Force, Contents, Checksum, Recurse, Links, Owner, Group, Mode):

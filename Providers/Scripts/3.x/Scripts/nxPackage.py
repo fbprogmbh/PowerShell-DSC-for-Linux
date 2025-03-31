@@ -14,6 +14,8 @@ import copy
 import fnmatch
 import re
 import importlib.util
+import hashlib
+
 
 apt = None
 rpm = None
@@ -641,6 +643,9 @@ def Set(Ensure, PackageManager, Name, FilePath, PackageGroup, Arguments, ReturnC
 def Test(Ensure, PackageManager, Name, FilePath, PackageGroup, Arguments, ReturnCode):
     ShowMof('TEST', Ensure, PackageManager, Name,
             FilePath, PackageGroup, Arguments, ReturnCode)
+    
+    exit_code = 0
+    
     try:
         p = Params(Ensure, PackageManager, Name,
                    FilePath, PackageGroup, Arguments, ReturnCode)
@@ -650,17 +655,28 @@ def Test(Ensure, PackageManager, Name, FilePath, PackageGroup, Arguments, Return
         LG().Log(
             'ERROR', 'ERROR - Unable to initialize nxPackageProvider. ' + str(e))
         return [-1]
+    
     installed, out = IsPackageInstalled(p)
+    
     if (installed and Ensure == 'present') or (not installed and Ensure == 'absent'):
-        return [0]
+        exit_code = 0
 
     if (installed and Ensure == 'absent'):
         LG().Log('ERROR', '##### Error: package ' + Name + ' should be absent, but is installed!')
+        exit_code = -1
 
     if (not installed and Ensure == 'present'):
         LG().Log('ERROR', '##### Error: package ' + Name + ' should be present, but is uninstalled!')
-        
-    return [-1]
+        exit_code = -1
+    
+    md5_hash = hashlib.md5(Name.encode()).hexdigest()
+    file_path = "/var/opt/omi/run/report"
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    
+    with open(file_path, "a") as f:
+        f.write(f"{md5_hash}:{exit_code}\n")
+       
+    return [exit_code]
 
 
 def Get(Ensure, PackageManager, Name, FilePath, PackageGroup, Arguments, ReturnCode):
