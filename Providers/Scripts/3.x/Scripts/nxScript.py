@@ -251,7 +251,7 @@ def Set(GetScript, SetScript, TestScript, User, Group):
     LG().Log('INFO', "stderr: " + stderrread)
 
     if exit_code != 0:
-         LG().Log('ERROR', "############# ERROR in test-script:\n" + TestScript)
+         LG().Log('ERROR', "############# ERROR in set-script:\n" + TestScript)
 
     return [exit_code]
 

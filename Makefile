@@ -80,7 +80,9 @@ endif
 	$(MAKE) -C $(INSTALLBUILDER_DIR) SSL_VERSION=098 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) BUILD_OMS_VAL=$(BUILD_OMS_VAL)
 
 	-mkdir -p release; \
-	cp $(OMI_PREFIX)/output_openssl_0.9.8/release/*.{rpm,deb} output/release/*.{rpm,deb} release/
+	cp $(OMI_PREFIX)/output_openssl_0.9.8/release/*.rpm output/release/*.rpm release/ 2>/dev/null || true
+	cp $(OMI_PREFIX)/output_openssl_0.9.8/release/*.deb output/release/*.deb release/ 2>/dev/null || true
+
 
 ifeq ($(BUILD_OMS),BUILD_OMS)
 dsckit100: nx nxOMSPerfCounter nxOMSSyslog nxOMSKeyMgmt nxOMSPlugin nxOMSCustomLog nxOMSSudoCustomLog nxFileInventory nxOMSGenerateInventoryMof nxOMSAgentNPMConfig nxOMSAutomationWorker nxOMSAuditdPlugin nxOMSContainers nxOMSWLI
@@ -90,7 +92,9 @@ endif
 	$(MAKE) -C $(INSTALLBUILDER_DIR) SSL_VERSION=100 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) BUILD_OMS_VAL=$(BUILD_OMS_VAL)
 
 	-mkdir -p release; \
-	cp $(OMI_PREFIX)/output_openssl_1.0.0/release/*.{rpm,deb} output/release/*.{rpm,deb} release/
+	cp $(OMI_PREFIX)/output_openssl_1.0.0/release/*.rpm output/release/*.rpm release/ 2>/dev/null || true
+	cp $(OMI_PREFIX)/output_openssl_1.0.0/release/*.deb output/release/*.deb release/ 2>/dev/null || true
+
 
 ifeq ($(BUILD_OMS),BUILD_OMS)
 dsckit110: nx nxOMSPerfCounter nxOMSSyslog nxOMSKeyMgmt nxOMSPlugin nxOMSCustomLog nxOMSSudoCustomLog nxFileInventory nxOMSGenerateInventoryMof nxOMSAgentNPMConfig nxOMSAutomationWorker nxOMSAuditdPlugin
@@ -100,7 +104,9 @@ endif
 	$(MAKE) -C $(INSTALLBUILDER_DIR) SSL_VERSION=110 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) BUILD_OMS_VAL=$(BUILD_OMS_VAL)
 
 	-mkdir -p release; \
-	cp $(OMI_PREFIX)/output_openssl_1.1.0/release/*.{rpm,deb} output/release/*.{rpm,deb} release/
+	cp $(OMI_PREFIX)/output_openssl_1.1.0/release/*.rpm output/release/*.rpm release/ 2>/dev/null || true
+	cp $(OMI_PREFIX)/output_openssl_1.1.0/release/*.deb output/release/*.deb release/ 2>/dev/null || true
+
 
 ifeq ($(BUILD_OMS),BUILD_OMS)
 dsckit300: nx nxOMSPerfCounter nxOMSSyslog nxOMSKeyMgmt nxOMSPlugin nxOMSCustomLog nxOMSSudoCustomLog nxFileInventory nxOMSGenerateInventoryMof nxOMSAgentNPMConfig nxOMSAutomationWorker nxOMSAuditdPlugin
@@ -110,7 +116,9 @@ endif
 	$(MAKE) -C $(INSTALLBUILDER_DIR) SSL_VERSION=300 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) BUILD_OMS_VAL=$(BUILD_OMS_VAL)
 
 	-mkdir -p release; \
-	cp $(OMI_PREFIX)/output_openssl_3.0.0/release/*.{rpm,deb} output/release/*.{rpm,deb} release/
+	cp $(OMI_PREFIX)/output_openssl_3.0.0/release/*.rpm output/release/*.rpm release/ 2>/dev/null || true
+	cp $(OMI_PREFIX)/output_openssl_3.0.0/release/*.deb output/release/*.deb release/ 2>/dev/null || true
+
 
 ifeq ($(BUILD_OMS),BUILD_OMS)
 dsckit300: nx nxOMSPerfCounter nxOMSSyslog nxOMSKeyMgmt nxOMSPlugin nxOMSCustomLog nxOMSSudoCustomLog nxFileInventory nxOMSGenerateInventoryMof nxOMSAgentNPMConfig nxOMSAutomationWorker nxOMSAuditdPlugin
@@ -120,7 +128,9 @@ endif
 	$(MAKE) -C $(INSTALLBUILDER_DIR) SSL_VERSION=300 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) BUILD_OMS_VAL=$(BUILD_OMS_VAL)
 
 	-mkdir -p release; \
-	cp $(OMI_PREFIX)/output_openssl_3.0.0/release/*.{rpm,deb} output/release/*.{rpm,deb} release/
+	cp $(OMI_PREFIX)/output_openssl_3.0.0/release/*.rpm output/release/*.rpm release/ 2>/dev/null || true
+	cp $(OMI_PREFIX)/output_openssl_3.0.0/release/*.deb output/release/*.deb release/ 2>/dev/null || true
+
 
 ifeq ($(BUILD_OMS),BUILD_OMS)
 dsckit300: nx nxOMSPerfCounter nxOMSSyslog nxOMSKeyMgmt nxOMSPlugin nxOMSCustomLog nxOMSSudoCustomLog nxFileInventory nxOMSGenerateInventoryMof nxOMSAgentNPMConfig nxOMSAutomationWorker nxOMSAuditdPlugin
@@ -130,7 +140,9 @@ endif
 	$(MAKE) -C $(INSTALLBUILDER_DIR) SSL_VERSION=300 BUILD_RPM=$(BUILD_RPM) BUILD_DPKG=$(BUILD_DPKG) BUILD_OMS_VAL=$(BUILD_OMS_VAL)
 
 	-mkdir -p release; \
-	cp $(OMI_PREFIX)/output_openssl_3.0.0/release/*.{rpm,deb} output/release/*.{rpm,deb} release/
+	cp $(OMI_PREFIX)/output_openssl_3.0.0/release/*.rpm output/release/*.rpm release/ 2>/dev/null || true
+	cp $(OMI_PREFIX)/output_openssl_3.0.0/release/*.deb output/release/*.deb release/ 2>/dev/null || true
+
 
 dsc098: lcm098 providers
 	mkdir -p intermediate/Scripts
