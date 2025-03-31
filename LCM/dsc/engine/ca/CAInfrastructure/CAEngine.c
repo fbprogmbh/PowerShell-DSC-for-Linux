@@ -886,8 +886,9 @@ MI_Result SetResourcesInOrder(_In_ LCMProviderContext *lcmContext,
 
                 return r;
                 */
+
+		// we want all tests to execute for detailed reporting
                 bAllTestResult = MI_FALSE;
-                //*resultStatus = 1;
                 continue;
             }
         }
@@ -914,6 +915,9 @@ MI_Result SetResourcesInOrder(_In_ LCMProviderContext *lcmContext,
 
     if ((flags & LCM_EXECUTE_TESTONLY))
     {
+	// read the result of tests in case we are only testing. The value is written into 
+	// resultStatus which is given as a pointer, so setting the test result is a 
+	// side effect here
         if (bAllTestResult == MI_FALSE)
         {
             *resultStatus = 0;

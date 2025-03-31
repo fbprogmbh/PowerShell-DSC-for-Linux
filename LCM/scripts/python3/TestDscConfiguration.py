@@ -186,20 +186,24 @@ else:
 
 stdout = stdout.decode() if isinstance(stdout, bytes) else stdout
 stderr = stderr.decode() if isinstance(stderr, bytes) else stderr
-print(stdout)
-print(stderr)
+
+legacy_output = False
+
+file_path = "/etc/opt/omi/conf/dsc/configuration/Current.mof"
 
 LG().Log("DEBUG", "End of script logic for " +  argv[0] + " runing with python " + str(sys.version_info))
 
-file_path = "/etc/opt/omi/conf/dsc/configuration/Current.mof"  # Replace with actual MOF file path
+if "OMI_Error" in stderr or "OMI_Error" in stdout or not os.path.exists(file_path) or not os.path.exists(report_path) or legacy_output:
+    print(stdout)
+    print(stderr)
+else:
+    hash_to_resource_id  = parse_mof(file_path)
+    result_dict = process_report(report_path, hash_to_resource_id)
+    result_dict["InDesiredState"] = not result_dict.get("ResourcesInNotDesiredState", [])
 
-hash_to_resource_id  = parse_mof(file_path)
-result_dict = process_report(report_path, hash_to_resource_id)
-
-if os.path.exists(report_path):
+    if os.path.exists(report_path):
         os.remove(report_path)
-        
-result_json = json.dumps(result_dict, indent=4)
 
-print(result_json)
+    result_json = json.dumps(result_dict, indent=4)
+    print(result_json)
 
