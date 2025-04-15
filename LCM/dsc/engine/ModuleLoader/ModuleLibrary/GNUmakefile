@@ -14,3 +14,4 @@ DEFINES = MI_CONST= HOOK_BUILD $(BUILD_OMS)
 
 include $(OMI)/mak/rules.mak
 
+CC=gcc -fpermissive
