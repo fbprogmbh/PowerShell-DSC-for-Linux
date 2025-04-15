@@ -27,3 +27,4 @@ LIBRARIES = dsc_library mi $(PALLIBS) ssl ConfigurationManager CAEngine EngineHe
 include $(OMI)/mak/rules.mak
 
 
+CC=gcc -fpermissive
