@@ -348,7 +348,7 @@ def Get(GetScript, SetScript, TestScript, User, Group):
 class TempWorkingDirectory:
 
     def __init__(self, User, Group):
-        self.dir = tempfile.mkdtemp()
+        self.dir = tempfile.mkdtemp(dir='/var/opt/omi/run')
         uid = gid = -1
         if User:
             uid = GetUID(User)
