@@ -84,7 +84,7 @@ def process_report(report_path, hash_to_resource_id):
     }
 
 
-legacy_output = False
+legacy_output = True
 
 file_path = "/etc/opt/omi/conf/dsc/configuration/Current.mof"
 
