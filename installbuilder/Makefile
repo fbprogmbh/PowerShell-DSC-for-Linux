@@ -42,7 +42,7 @@ ifeq ($(BUILD_RPM),1)
 	@echo "========================= Make DSC installer"
 	sudo rm -rf $(STAGING_DIR) $(INTERMEDIATE_DIR) 
 	mkdir -p $(RELEASE_DIR) $(STAGING_DIR) $(INTERMEDIATE_DIR)
-	python $(IB_DIR)/installbuilder.py \
+	umask 022 && python $(IB_DIR)/installbuilder.py \
 		--BASE_DIR=$(TOP) \
 		--TARGET_DIR=$(RELEASE_DIR) \
 		--INTERMEDIATE_DIR=$(INTERMEDIATE_DIR) \
@@ -74,7 +74,7 @@ ifeq ($(BUILD_OMS_VAL),1)
 endif
 	sudo rm -rf $(STAGING_DIR) $(INTERMEDIATE_DIR) 
 	mkdir -p $(RELEASE_DIR) $(STAGING_DIR) $(INTERMEDIATE_DIR)
-	python $(IB_DIR)/installbuilder.py \
+	umask 022 && python $(IB_DIR)/installbuilder.py \
 		--BASE_DIR=$(TOP) \
 		--TARGET_DIR=$(RELEASE_DIR) \
 		--INTERMEDIATE_DIR=$(INTERMEDIATE_DIR) \
