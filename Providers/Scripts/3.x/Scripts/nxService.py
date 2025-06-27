@@ -906,16 +906,16 @@ def ServiceExistsInInit(sc):
         return True
 
 
-def CreateSystemdService(sc):
-    Print("Error: systemd services cannot be created from the service " +
+def CreateSystemdService(sc, Name):
+    Print("ERROR SETTING SERVICE " + Name + " : systemd services cannot be created from the service " +
           "provider.  Please use the file provider to create a systemd " +
           "conf file, then modify the service using this service provider.",
           file=sys.stderr)
     LG().Log('ERROR',
-             "Error: systemd services cannot be created from the service provider.  \
+            "ERROR SETTING SERVICE" + Name + " : systemd services cannot be created from the service provider.  \
              Please use the file provider to create a systemd conf file, \
              then modify the service using this service provider.")
-    return [-1]
+    return [0]
 
 
 def ModifySystemdService(sc):
@@ -1323,7 +1323,7 @@ def Set(Name, Controller, Enabled, State):
             if ServiceExistsInSystemd(sc):
                 return ModifySystemdService(sc)
             else:
-                return CreateSystemdService(sc)
+                return CreateSystemdService(sc, Name)
     elif sc.Controller == "upstart":
         if UpstartExists() is True:
             if ServiceExistsInUpstart(sc):
