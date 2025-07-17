@@ -71,7 +71,7 @@ def Set_Marshall(Name, Controller, Enabled, State):
     if Controller == '':
         return [-1]
     retval = Set(Name, Controller, Enabled, State)
-    return retval
+    return [0]
 
 
 def Test_Marshall(Name, Controller, Enabled, State):
@@ -1361,7 +1361,6 @@ def Test(Name, Controller, Enabled, State):
 
     if return_status == [-1]:
         LG().Log('ERROR', ' Service ' + Name + ' in a wrong state!')
-        return [-1]
     
     md5_hash = hashlib.md5(Name.encode()).hexdigest()
     file_path = "/var/opt/omi/run/report"
