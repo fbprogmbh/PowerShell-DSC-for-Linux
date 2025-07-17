@@ -79,7 +79,7 @@ def process_report(report_path, hash_to_resource_id):
 
     return {
         "ResourcesInDesiredState": resources_in_desired_state,
-        "ResourcesInNotDesiredState": resources_in_not_desired_state,
+        "ResourcesNotInDesiredState": resources_in_not_desired_state,
         "InDesiredState": not resources_in_not_desired_state
     }
 
