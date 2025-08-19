@@ -56,7 +56,7 @@ def parse_mof(file_path):
 
 def process_report(report_path, hash_to_resource_id):
     resources_in_desired_state = []  # List to store ResourceIDs with state 0
-    resources_in_not_desired_state = []  # List to store ResourceIDs with state 1
+    resources_not_in_desired_state = []  # List to store ResourceIDs with state 1
     
     # Open and read the report file
     with open(report_path, 'r') as report_file:
@@ -71,20 +71,23 @@ def process_report(report_path, hash_to_resource_id):
                     if state == '0':
                         resources_in_desired_state.append(resource_id)
                     else:
-                        resources_in_not_desired_state.append(resource_id)
+                        resources_not_in_desired_state.append(resource_id)
                 else:
                      LG().Log("ERROR","could not lookup key " + md5_hash);
                      print("ERROR","could not lookup key " + md5_hash);
 
 
+    resources_in_desired_state = [{"ResourceId": r, "IndesiredState": True} for r in resources_in_desired_state]
+    resources_not_in_desired_state = [{"ResourceId": r, "IndesiredState": False} for r in resources_not_in_desired_state]
+
     return {
         "ResourcesInDesiredState": resources_in_desired_state,
-        "ResourcesNotInDesiredState": resources_in_not_desired_state,
-        "InDesiredState": not resources_in_not_desired_state
+        "ResourcesNotInDesiredState": resources_not_in_desired_state,
+        "InDesiredState": not resources_not_in_desired_state
     }
 
 
-legacy_output = True
+legacy_output = False
 
 file_path = "/etc/opt/omi/conf/dsc/configuration/Current.mof"
 
@@ -219,12 +222,6 @@ else:
     if os.path.exists(report_path):
         os.remove(report_path)
 
-    in_desired_state = "InDesiredState=true" in stdout
-    
-    if result_dict["InDesiredState"] != in_desired_state:
-        print("Error: Mismatch between result_dict[\"InDesiredState\"] and stdout content!", file=sys.stderr)
-        sys.exit(1)
-    
     result_json = json.dumps(result_dict, indent=4)
     print(result_json)
 
