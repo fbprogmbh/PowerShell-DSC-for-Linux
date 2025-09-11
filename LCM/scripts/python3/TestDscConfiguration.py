@@ -22,8 +22,8 @@ def parse_mof(file_path):
     mof_data = Path(file_path).read_text(encoding='utf-8')
     hash_to_resource_id = {}  # Dictionary to store MD5 hashes as keys and ResourceIDs as values
     
-    resource_blocks = re.split(r'(?=instance of MSFT_)', mof_data)[1:]  # Skip first empty split
-    
+    resource_blocks = re.findall(r'instance of MSFT_.*?(?=instance of MSFT_|$)', mof_data, re.DOTALL)
+
     pattern = ''
     
     for block in resource_blocks:
