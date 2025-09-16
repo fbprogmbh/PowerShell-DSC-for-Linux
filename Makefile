@@ -354,7 +354,8 @@ configureomi100:
 	(cd $(OMI_PREFIX); ./configure $(DEBUG_FLAGS) --enable-preexec --prefix=/opt/omi --outputdirname=output_openssl_1.0.0 --localstatedir=/var/opt/omi --sysconfdir=/etc/opt/omi/conf --certsdir=/etc/opt/omi/ssl --opensslcflags="$(openssl100_cflags)" --openssllibs="-L$(current_dir)/ext/curl/current_platform/lib $(openssl100_libs)" --openssllibdir="$(openssl100_libdir)")
 
 configureomi110:
-	(cd $(OMI_PREFIX); ./configure $(DEBUG_FLAGS) --enable-preexec --prefix=/opt/omi --outputdirname=output_openssl_1.1.0 --localstatedir=/var/opt/omi --sysconfdir=/etc/opt/omi/conf --certsdir=/etc/opt/omi/ssl --opensslcflags="$(openssl110_cflags)" --openssllibs="-L$(current_dir)/ext/curl/current_platform/lib $(openssl110_libs)" --openssllibdir="$(openssl110_libdir)")
+	#(cd $(OMI_PREFIX); ./configure $(DEBUG_FLAGS) --enable-preexec --prefix=/opt/omi --outputdirname=output_openssl_1.1.0 --localstatedir=/var/opt/omi --sysconfdir=/etc/opt/omi/conf --certsdir=/etc/opt/omi/ssl --opensslcflags="$(openssl110_cflags)" --openssllibs="-L$(current_dir)/ext/curl/current_platform/lib $(openssl110_libs)" --openssllibdir="$(openssl110_libdir)")
+	(cd $(OMI_PREFIX); ./configure $(DEBUG_FLAGS) --enable-microsoft --outputdirname=output_openssl_1.1.0)
 
 configureomi300:
 	(cd $(OMI_PREFIX); ./configure $(DEBUG_FLAGS) --enable-microsoft --outputdirname=output_openssl_3.0.0)
