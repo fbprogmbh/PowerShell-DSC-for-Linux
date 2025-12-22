@@ -167,9 +167,9 @@ omsagent (>= 1.0.0)
 #else
 
 #if PACKAGE_TYPE == RPM
-omi-fbpro >= 1.9.1-0
+omi >= 1.9.1-0
 #else
-omi-fbpro (>= 1.9.1.0)
+omi (>= 1.9.1.0)
 #endif
 
 #endif
