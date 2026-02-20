@@ -325,7 +325,7 @@ class Params:
         self.cmds['yum']['stat'] = self.cmds['rpm']['stat']
         self.cmds['yum']['stat_all'] = self.cmds['rpm']['stat_all']
         self.cmds['zypper']['present'] = 'zypper --non-interactive % install ^'
-        self.cmds['zypper']['absent'] = self.cmds['rpm']['absent']
+        self.cmds['zypper']['absent'] = 'zypper --non-interactive % remove ^'
         self.cmds['zypper']['stat'] = self.cmds['rpm']['stat']
         self.cmds['zypper']['stat_all'] = self.cmds['rpm']['stat_all']
         self.cmds['zypper']['stat_group'] = None

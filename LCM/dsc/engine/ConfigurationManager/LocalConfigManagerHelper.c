@@ -991,7 +991,7 @@ MI_Result CallConsistencyEngine(
         {
             MSFT_DSCMetaConfiguration_Delete((MSFT_DSCMetaConfiguration *)metaConfigInstance);
             moduleManager->ft->Close(moduleManager, NULL);
-            SetLCMStatusReady(lcmContext, result);
+            SetLCMStatusReady();
             return result;
         }
     }
@@ -6198,7 +6198,7 @@ MI_Result MI_CALL LCM_Pull_Execute(
                 result = ApplyPendingConfig(lcmContext, moduleManager, 0, &resultExecutionStatus, cimErrorDetails);
                 if (result == MI_RESULT_OK && (resultExecutionStatus & DSC_RESTART_SYSTEM_FLAG))
                 {
-                    SetLCMStatusReboot(lcmContext);
+                    SetLCMStatusReboot();
                 }
                 
                 if (result == MI_RESULT_OK)
